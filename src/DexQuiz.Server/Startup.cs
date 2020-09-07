@@ -61,13 +61,13 @@ namespace DexQuiz.Server
 
             app.UseSwagger(c =>
             {
-                c.RouteTemplate = "{documentName}/swagger.json";
+                c.RouteTemplate = "/api/docs/{documentName}/swagger.json";
             });
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/v1/swagger.json", "DexQuiz - API");
-                c.RoutePrefix = "";
+                c.SwaggerEndpoint("v1/swagger.json", "DexQuiz - API");
+                c.RoutePrefix = "api/docs";
             });
 
             app.UseHttpsRedirection();

@@ -5,7 +5,6 @@ using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Server.Models;
 using DexQuiz.Server.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

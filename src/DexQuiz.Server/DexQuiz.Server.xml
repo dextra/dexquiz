@@ -4,5 +4,146 @@
         <name>DexQuiz.Server</name>
     </assembly>
     <members>
+        <member name="M:DexQuiz.Server.Controllers.AuthenticationController.Post(DexQuiz.Server.Models.TokenRequest)">
+            <summary>
+            Returns a new JWT Token
+            </summary>
+            <param name="tokenRequest"> TokenRequest data</param>
+            <response code="200">Returns jwt token</response>
+            <response code="401">Invalid credentials </response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.GetAsync(System.Int32)">
+            <summary>
+            Get question by id
+            </summary>
+            <param name="id"> Primary key</param>
+            <response code="200">Returns a build</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.GetTrackQuestionsAsync(System.Int32)">
+            <summary>
+            Gets all questions for a track
+            </summary>
+            <param name="trackId">Track id</param>
+            <response code="200">Returns all questions of the track</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.PostAsync(DexQuiz.Server.Models.QuestionModel)">
+            <summary>
+            Add a new question into the database
+            </summary>
+            <param name="question"> Question information</param>
+            <response code="200">Returns the new question</response>
+            <response code="400">Missing some information</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.UpdateQuestionAsync(System.Int32,DexQuiz.Server.Models.QuestionModel)">
+            <summary>
+            Updates a question
+            </summary>
+            <param name="id">Question id</param>
+            <param name="question">Question with updated information</param>
+            <response code="204">If the question was successfully updated</response>
+            <response code="400">If the question id in the URI and in the question model are different</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.DeleteQuestionAsync(System.Int32)">
+            <summary>
+            Deletes a question
+            </summary>
+            <param name="id">Question id</param>
+            <response code="204">If the question was successfully deleted</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.PickQuestionForUserAsync(System.Int32)">
+            <summary>
+            Picks a question for a user.
+            The question will be randomly chosen from the available track questions.
+            12 questions per track are available for an user, 4 questions for each question level (easy, medium and hard).
+            </summary>
+            <param name="trackId">Track id</param>
+            <response code="200">Returns a question picked for the user</response>
+            <response code="400">If the user already completed the track</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.PickCurrentProgressAsync(System.Int32)">
+            <summary>
+            Picks the current question number to the user.
+            12 questions per track are available for an user, 4 questions for each question level (easy, medium and hard).
+            </summary>
+            <param name="trackId">Track id</param>
+            <response code="200">Returns the number of the current question for the user</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.QuestionController.AnswerQuestionAsync(DexQuiz.Server.Models.AnsweredQuestionModel)">
+            <summary>
+            Saves an user answer for a question.
+            </summary>
+            <param name="answeredQuestion">The answered question</param>
+            <response code="204">If the user's answer for a question was successfully saved</response>
+            <response code="400">If the user already completed the track; if the user already answered the question; or if the answer does not belong to the question</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.RankingController.GetTrackRankings(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Shows the ranking in ascending order for a given track.
+            If is a public access, will have the top positions without users' ids.
+            If the user is an admin, will have the top positions with users ids.
+            If the user is a regular user, only the user's position will have the user id.
+            For a regular user, the ranking will return the top positions, if the user is in it,
+            or show the top positions plus the user's position.
+            If the user is not in the ranking yet, the top positions will be returned.
+            Only when an user finishes the track questions, his/her ranking will be displayed.
+            The ranking ordering criteria is by most points, then by lowest completed time.
+            </summary>
+            <param name="trackId">Track id</param>
+            <param name="top">Number of ranking positions to be fetched</param>
+            <response code="200">Returns the ranking</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.TrackController.GetAllAvailableTracksAsync">
+            <summary>
+            Gets all available tracks
+            </summary>
+            <response code="200">Returns all tracks</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.TrackController.GetTrackAsync(System.Int32)">
+            <summary>
+            Gets track by id
+            </summary>
+            <param name="id">Track id</param>
+            <response code="200">Returns the track of corresponding id</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.TrackController.AddTrackAsync(DexQuiz.Server.Models.TrackModel)">
+            <summary>
+            Creates a track
+            </summary>
+            <param name="trackModel">Track model</param>
+            <response code="201">Returns the created track and its URI</response>
+            <response code="400">If the track model is invalid</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.TrackController.UpdateTrackAsync(System.Int32,DexQuiz.Server.Models.TrackModel)">
+            <summary>
+            Updates a track
+            </summary>
+            <param name="id">Track id</param>
+            <param name="trackModel">Track model</param>
+            <response code="204">If the track was successfully updated</response>
+            <response code="400">If the track model is invalid</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.TrackController.DeleteTrackAsync(System.Int32)">
+            <summary>
+            Deletes a track
+            </summary>
+            <param name="id">Track id</param>
+            <response code="204">If the track was successfully deleted</response>
+            <response code="400">If there was an error while deleting the track</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.UserController.GetAsync(System.Int32)">
+            <summary>
+            Get an user by id
+            </summary>
+            <param name="id"> Primary key</param>
+            <response code="200">Returns a build</response>
+        </member>
+        <member name="M:DexQuiz.Server.Controllers.UserController.PostAsync(DexQuiz.Server.Models.UserModel)">
+            <summary>
+            Add a new user into the database
+            </summary>
+            <param name="newUser"> User information</param>
+            <response code="200">Returns the new user</response>
+            <response code="400">Missing some information</response>
+        </member>
     </members>
 </doc>

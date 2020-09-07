@@ -7,8 +7,6 @@ using DexQuiz.Server.Models.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DexQuiz.Server.Controllers
@@ -212,3 +210,4 @@ namespace DexQuiz.Server.Controllers
 
         #endregion
     }
+}
