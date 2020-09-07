@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A30C2F7D-11E6-41E5-9F32-F2832259AA88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Server", "src\DexQuiz.Server\DexQuiz.Server.csproj", "{C8244849-4ED5-4D99-94BB-FEF0ACAFEC46}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Client", "src\DexQuiz.Client\DexQuiz.Client.csproj", "{FFA6E382-789F-4608-B0E9-65967E030342}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Shared", "src\DexQuiz.Shared\DexQuiz.Shared.csproj", "{B35CE13E-817C-444C-9DE8-578A9EE15A32}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Core", "src\DexQuiz.Core\DexQuiz.Core.csproj", "{0D7CDCB6-306F-4FBD-9721-52576D12594F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DexQuiz.Infrastructure", "src\DexQuiz.Infrastructure\DexQuiz.Infrastructure.csproj", "{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8244849-4ED5-4D99-94BB-FEF0ACAFEC46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8244849-4ED5-4D99-94BB-FEF0ACAFEC46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8244849-4ED5-4D99-94BB-FEF0ACAFEC46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8244849-4ED5-4D99-94BB-FEF0ACAFEC46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFA6E382-789F-4608-B0E9-65967E030342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFA6E382-789F-4608-B0E9-65967E030342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFA6E382-789F-4608-B0E9-65967E030342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFA6E382-789F-4608-B0E9-65967E030342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B35CE13E-817C-444C-9DE8-578A9EE15A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B35CE13E-817C-444C-9DE8-578A9EE15A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B35CE13E-817C-444C-9DE8-578A9EE15A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B35CE13E-817C-444C-9DE8-578A9EE15A32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D7CDCB6-306F-4FBD-9721-52576D12594F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D7CDCB6-306F-4FBD-9721-52576D12594F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D7CDCB6-306F-4FBD-9721-52576D12594F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D7CDCB6-306F-4FBD-9721-52576D12594F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8244849-4ED5-4D99-94BB-FEF0ACAFEC46} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
+		{FFA6E382-789F-4608-B0E9-65967E030342} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
+		{B35CE13E-817C-444C-9DE8-578A9EE15A32} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
+		{0D7CDCB6-306F-4FBD-9721-52576D12594F} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
+		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE357232-6810-4E36-8CEE-59E2EB97C028}
+	EndGlobalSection
+EndGlobal
