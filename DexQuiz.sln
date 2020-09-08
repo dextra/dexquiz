@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Shared", "src\DexQu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Core", "src\DexQuiz.Core\DexQuiz.Core.csproj", "{0D7CDCB6-306F-4FBD-9721-52576D12594F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DexQuiz.Infrastructure", "src\DexQuiz.Infrastructure\DexQuiz.Infrastructure.csproj", "{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Infrastructure", "src\DexQuiz.Infrastructure\DexQuiz.Infrastructure.csproj", "{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D0CC918-41A1-4970-BD16-16F2ACFBEA4E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
