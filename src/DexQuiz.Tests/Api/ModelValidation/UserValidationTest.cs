@@ -12,7 +12,7 @@ namespace DexQuiz.Tests.Api.ModelValidation
         [TestCase("XPTO", "19999999999", "test@test.com", "test123", UserType.Administrator, true)]
         [TestCase(null, "19999999999", "test@test.com", "test123", UserType.Default, false)]
         [TestCase("XPTO", null, "test@test.com", "test123", UserType.Default, false)]
-        [TestCase("XPTO", null, "test@test.com", "test123", UserType.Default, false)]
+        [TestCase("XPTO", "19999999999", null, "test123", UserType.Default, false)]
         [TestCase("XPTO", "19999999999", "test@test.com", null, UserType.Default, false)]
         [TestCase("XPTO", "19999999999", "test@test.com", "test123", null, false)]
 
