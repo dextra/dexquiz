@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Shared", "src\DexQu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Core", "src\DexQuiz.Core\DexQuiz.Core.csproj", "{0D7CDCB6-306F-4FBD-9721-52576D12594F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DexQuiz.Infrastructure", "src\DexQuiz.Infrastructure\DexQuiz.Infrastructure.csproj", "{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Infrastructure", "src\DexQuiz.Infrastructure\DexQuiz.Infrastructure.csproj", "{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Tests", "src\DexQuiz.Tests\DexQuiz.Tests.csproj", "{A4221E7C-FE01-4EBA-BB4C-F86B9A9ADB3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4221E7C-FE01-4EBA-BB4C-F86B9A9ADB3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4221E7C-FE01-4EBA-BB4C-F86B9A9ADB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4221E7C-FE01-4EBA-BB4C-F86B9A9ADB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4221E7C-FE01-4EBA-BB4C-F86B9A9ADB3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{B35CE13E-817C-444C-9DE8-578A9EE15A32} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
 		{0D7CDCB6-306F-4FBD-9721-52576D12594F} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
 		{4A35233C-9C47-4776-AB90-CD0DC2FC40D7} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
+		{A4221E7C-FE01-4EBA-BB4C-F86B9A9ADB3D} = {A30C2F7D-11E6-41E5-9F32-F2832259AA88}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CE357232-6810-4E36-8CEE-59E2EB97C028}
