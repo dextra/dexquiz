@@ -26,6 +26,8 @@ namespace DexQuiz.Server
         {
             services.AddApplicationInsightsTelemetry();
 
+            services.ConfigureDependencyInjectionForApi(Configuration);
+
             services.AddControllersWithViews()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies(), null));
 
