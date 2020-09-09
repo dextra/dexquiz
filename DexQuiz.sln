@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Tests", "src\DexQuiz.Tests\DexQuiz.Tests.csproj", "{FC252671-5ECC-4D4C-A407-1A9B88B9B9D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DexQuiz.Tests", "test\DexQuiz.Tests\DexQuiz.Tests.csproj", "{FC252671-5ECC-4D4C-A407-1A9B88B9B9D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
