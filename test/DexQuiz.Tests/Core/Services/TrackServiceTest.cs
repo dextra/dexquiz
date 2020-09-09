@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace DexQuiz.Tests.Core.Services
 {
     [TestFixture]
-    [NonParallelizable]
     public sealed class TrackServiceTest
     {
         private Mock<IUnitOfWork> _unitOfWork;
