@@ -18,7 +18,7 @@ namespace DexQuiz.Infrastructure.Repositories
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.Where(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefaultAsync();
+            return await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
         }
     }
 }
