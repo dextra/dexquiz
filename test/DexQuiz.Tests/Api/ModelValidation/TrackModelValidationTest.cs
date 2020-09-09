@@ -3,23 +3,33 @@ using DexQuiz.Server.Models;
 using DexQuiz.Server.Models.Validations;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
+using System.Linq;
 
 namespace DexQuiz.Tests.Api.ModelValidation
 {
-    public sealed class TrackModelValidationTeste
+    public sealed class TrackModelValidationTest
     {
         private readonly TrackModelValidation _validator;
         private readonly Fixture _fixture;
 
-        public TrackModelValidationTeste()
+        public TrackModelValidationTest()
         {
             _fixture = new Fixture();
             _validator = new TrackModelValidation();
         }
 
-        public void ShouldNotHaveErrors()
+        [TestCase(true, 10, "image url", "name")]
+        [TestCase(false, 3000, "image url", "name")]
+        public void ShouldNotHaveErrors(bool available, int id, string imageUrl, string name)
         {
-            var trackModel = _fixture.Create<TrackModel>();
+            var trackModel = new TrackModel
+            {
+                Available = available,
+                Awards = _fixture.CreateMany<AwardModel>().ToList(),
+                Id = id,
+                ImageUrl = imageUrl,
+                Name = name
+            };
 
             var result = _validator.TestValidate(trackModel);
 

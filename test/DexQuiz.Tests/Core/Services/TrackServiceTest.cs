@@ -1,28 +1,26 @@
 ﻿using AutoFixture;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using DexQuiz.Core.Entities;
 using DexQuiz.Core.Interfaces.Repositories;
 using DexQuiz.Core.Interfaces.UoW;
 using DexQuiz.Core.Services;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DexQuiz.Tests.Core.Services
 {
-    public sealed class TrackServiceTeste
+    [TestFixture]
+    [NonParallelizable]
+    public sealed class TrackServiceTest
     {
-        private readonly Mock<IUnitOfWork> _unitOfWork;
-        private readonly Mock<ITrackRepository> _trackRepository;
+        private Mock<IUnitOfWork> _unitOfWork;
+        private Mock<ITrackRepository> _trackRepository;
 
-        private readonly Fixture _fixture;
-        private readonly TrackService _trackService;
+        private Fixture _fixture;
+        private TrackService _trackService;
 
-        public TrackServiceTeste()
+        [SetUp]
+        public void SetUp()
         {
             _fixture = new Fixture();
 
@@ -31,7 +29,7 @@ namespace DexQuiz.Tests.Core.Services
 
             _trackService = new TrackService
             (
-                _unitOfWork.Object, 
+                _unitOfWork.Object,
                 _trackRepository.Object
             );
         }
@@ -113,15 +111,10 @@ namespace DexQuiz.Tests.Core.Services
         {
             var track = _fixture.Create<Track>();
 
-            _trackRepository
-                .Setup(x => x.FindAsync(It.IsAny<int>()))
-                .ReturnsAsync(track);
-
             _trackRepository.Setup(x => x.Update(It.IsAny<Track>()));
 
             await _trackService.UpdateTrackAsync(track);
 
-            _trackRepository.Verify(x => x.FindAsync(It.IsAny<int>()), Times.Once);
             _trackRepository.Verify(x => x.Update(It.IsAny<Track>()), Times.Once);
             _unitOfWork.Verify(x => x.CommitAsync(), Times.Once);
         }
