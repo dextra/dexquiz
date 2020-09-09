@@ -38,34 +38,41 @@ namespace DexQuiz.Tests.Core.Services
             Assert.IsTrue(result == expectedResult);
         }
 
-        [Test]
-        public void IsUserEmailValidTest()
+        [TestCase("XPTO", "1932353645", "testdumb@test.com", "test123", UserType.Default, true)]
+        public void IsUserEmailValidTest(string userName, string userCellphone, string userEmail, string userPassword, UserType type, bool expectedResult)
         {
-            var user = new User
+            var userModel = new User
             {
-                Name = "xpto",
-                CellPhone = "19888888887",
-                Email = "test@test.com",
-                Password = "test123",
-                UserType = UserType.Default
+                Name = userName,
+                CellPhone = "1911555551",
+                Email = userEmail,
+                Password = userPassword,
+                UserType = type
             };
-            
-            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(user));
+
+            var result = _userService.AddUser(userModel).Result;
+
+            Assert.IsTrue(result == expectedResult);
+            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
         }
 
-        [Test]
-        public void IsUserCellphoneValidTest()
+        [TestCase("XPTO", "1912121212", "test@test.com", "test123", UserType.Default, true)]
+        public void IsUserCellphoneValidTest(string userName, string userCellphone, string userEmail, string userPassword, UserType type, bool expectedResult)
         {
-            var user = new User
+
+            var userModel = new User
             {
-                Name = "xpto",
-                CellPhone = "19999999999",
-                Email = "dumb2@test.com",
-                Password = "test123",
-                UserType = UserType.Default
+                Name = userName,
+                CellPhone = userCellphone,
+                Email = "test@test.com.br",
+                Password = userPassword,
+                UserType = type
             };
 
-            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(user));
+            var result = _userService.AddUser(userModel).Result;
+
+            Assert.IsTrue(result == expectedResult);
+            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
         }
     }
 }
