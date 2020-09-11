@@ -20,14 +20,12 @@ namespace DexQuiz.Tests.Core.Services
     {
         private IUserService _userService;
         private UserController _userController;
-        private IMapper _mapper;
 
         [SetUp]
         public void Setup()
         {
             CreateNewDatabaseInMemory();
             _userService = ServiceProvider.GetService<IUserService>();
-            _mapper = ServiceProvider.GetService<IMapper>();
 
             var config = new MapperConfiguration(opts =>
             {
