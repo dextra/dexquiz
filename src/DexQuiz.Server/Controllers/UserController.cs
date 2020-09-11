@@ -32,7 +32,24 @@ namespace DexQuiz.Server.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<UserModel> GetAsync (int id)
         {
+            var teste = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => (a.FullName.Contains("DexQuiz.")))
+                .OrderByDescending(x => x.FullName)
+                .ToList();
             return _mapper.Map<UserModel>(await _userService.FindUserById(id));
+        }
+
+        /// <summary>
+        /// Get logged user
+        /// </summary>
+        /// <response code="200">Returns logged user</response>
+        [HttpGet]
+        public async Task<UserModel> GetLoggedUserAsync()
+        {
+            int userId = (int)this.GetLoggedUserId();
+
+            return _mapper.Map<UserModel>(await _userService.FindUserById(userId));
         }
 
         /// <summary>
