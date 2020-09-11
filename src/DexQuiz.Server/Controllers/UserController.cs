@@ -32,11 +32,6 @@ namespace DexQuiz.Server.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<UserModel> GetAsync (int id)
         {
-            var teste = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Where(a => (a.FullName.Contains("DexQuiz.")))
-                .OrderByDescending(x => x.FullName)
-                .ToList();
             return _mapper.Map<UserModel>(await _userService.FindUserById(id));
         }
 
