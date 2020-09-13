@@ -118,6 +118,27 @@ namespace DexQuiz.Tests.Core.Services
             };
 
             var result = _userController.GetLoggedUserAsync().Result != null;
+            Assert.IsTrue(resultAdd);
+            Assert.IsTrue(result == expectedResult);
+        }
+
+        [TestCase("TesteLoggedUser", "19123456789", "userByIdSuccess@user.com", "test123", UserType.Default, true, 1)]
+        [TestCase("TesteLoggedUser", "19991231232", "userByIdError@user.com", "test123", UserType.Default, false, 5)]
+        public void GetUserById(string userName, string userCellphone, string userEmail, string userPassword, UserType type, bool expectedResult, int userId)
+        {
+            var userModel = new User
+            {
+                Name = userName,
+                CellPhone = userCellphone,
+                Email = userEmail,
+                Password = userPassword,
+                UserType = type
+            };
+
+            var resultAdd = _userService.AddUser(userModel).Result;
+
+            var result = _userController.GetAsync(userId).Result != null;
+            Assert.IsTrue(resultAdd);
             Assert.IsTrue(result == expectedResult);
         }
     }
