@@ -122,8 +122,8 @@ namespace DexQuiz.Tests.Core.Services
             Assert.IsTrue(result == expectedResult);
         }
 
-        [TestCase("TesteLoggedUser", "19123456789", "userByIdSuccess@user.com", "test123", UserType.Default, true, 1)]
-        [TestCase("TesteLoggedUser", "19991231232", "userByIdError@user.com", "test123", UserType.Default, false, 5)]
+        [TestCase("TesteLoggedUser", "19222222222", "userByIdSuccess@user.com", "test123", UserType.Default, true, 1)]
+        [TestCase("TesteLoggedUser", "11111111111", "userByIdError@user.com", "test123", UserType.Default, false, 999)]
         public void GetUserById(string userName, string userCellphone, string userEmail, string userPassword, UserType type, bool expectedResult, int userId)
         {
             var userModel = new User
