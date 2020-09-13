@@ -36,6 +36,18 @@ namespace DexQuiz.Server.Controllers
         }
 
         /// <summary>
+        /// Get logged user
+        /// </summary>
+        /// <response code="200">Returns logged user</response>
+        [HttpGet]
+        public async Task<UserModel> GetLoggedUserAsync()
+        {
+            int userId = (int)this.GetLoggedUserId();
+
+            return _mapper.Map<UserModel>(await _userService.FindUserById(userId));
+        }
+
+        /// <summary>
         /// Add a new user into the database
         /// </summary>
         /// <param name="newUser"> User information</param>
