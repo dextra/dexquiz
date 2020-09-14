@@ -42,10 +42,12 @@ namespace DexQuiz.Server.Controllers
         /// </summary>
         /// <param name="trackId">Track id</param>
         /// <param name="top">Number of ranking positions to be fetched</param>
+        /// <param name="date">Date to filter ranking for a specific day</param>
         /// <response code="200">Returns the ranking</response>
         [HttpGet("track/{trackId}")]
         public async Task<IActionResult> GetTrackRankings(int trackId,
-                                              [FromQuery(Name = "top")] int? top = null)
+                                                            [FromQuery(Name = "top")] int? top = null,
+                                                            [FromQuery(Name = "date")] DateTime? date = null)
         {
             // TODO: Usar cache para rankings públicos?
             bool isUserAdmin = this.IsLoggedUserAdmin();
@@ -53,9 +55,9 @@ namespace DexQuiz.Server.Controllers
 
             var trackRankings = (isUserAdmin, userId) switch
             {
-                (_, null) => await _rankingService.GetPublicTrackRankingsAsync(trackId, top),
-                (true, _) => await _rankingService.GetTrackRankingsForAdminAsync(trackId, top),
-                (false, _) => await _rankingService.GetTrackRankingsForUserAsync(trackId, (int)userId, top)
+                (_, null) => await _rankingService.GetPublicTrackRankingsAsync(trackId, top, date),
+                (true, _) => await _rankingService.GetTrackRankingsForAdminAsync(trackId, top, date),
+                (false, _) => await _rankingService.GetTrackRankingsForUserAsync(trackId, (int)userId, top, date)
             };
 
             return Ok(_mapper.Map<TrackRankingModel[]>(trackRankings));
