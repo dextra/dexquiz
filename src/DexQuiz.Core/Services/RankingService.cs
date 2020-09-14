@@ -5,7 +5,6 @@ using DexQuiz.Core.Interfaces.UoW;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DexQuiz.Core.Services
@@ -36,20 +35,20 @@ namespace DexQuiz.Core.Services
             _questionService = questionService;
         }
 
-        public async Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null) =>
-            (await GetOrderedTrackRankingsAsync(trackId))
+        public async Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null, DateTime? date = null) =>
+            (await GetOrderedTrackRankingsAsync(trackId, date))
             .Take(top ?? DefaultNumberOfRankingsFetched)
             .Select(MapTrackRankingWithoutUserInfo);
 
-        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int trackId, int? top = null) =>
-            (await GetOrderedTrackRankingsAsync(trackId))
+        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int trackId, int? top = null, DateTime? date = null) =>
+            (await GetOrderedTrackRankingsAsync(trackId, date))
             .Take(top ?? DefaultNumberOfRankingsFetched)
             .Select(async tr => await MapTrackRankingWithUserInfo(tr))
             .Select(tr => tr.Result);
 
-        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null)
+        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null, DateTime? date = null)
         {
-            var trackRankings = await GetOrderedTrackRankingsAsync(trackId);
+            var trackRankings = await GetOrderedTrackRankingsAsync(trackId, date);
             var topRankings = trackRankings.Take(top ?? DefaultNumberOfRankingsFetched);
             var userTrackRanking = trackRankings.FirstOrDefault(tr => tr.UserId == userId);
 
@@ -112,11 +111,18 @@ namespace DexQuiz.Core.Services
             }
         }
 
-        private async Task<IEnumerable<TrackRanking>> GetOrderedTrackRankingsAsync(int trackId) =>
-            (await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null))
-                                              .OrderByDescending(r => r.Points)
-                                              .ThenBy(r => r.CompletedTime)
-                                              .Select(MapTrackRankingInsertingPosition);
+        private async Task<IEnumerable<TrackRanking>> GetOrderedTrackRankingsAsync(int trackId, DateTime? date)
+        {
+            IEnumerable<TrackRanking> trackRankings = null;
+            if (date.HasValue)
+                trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null && r.StartedAtUtc.Date == date.Value.Date);
+            else
+                trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null);
+
+            return trackRankings.OrderByDescending(r => r.Points)
+                                .ThenBy(r => r.CompletedTime)
+                                .Select(MapTrackRankingInsertingPosition);
+        }
 
         private async Task<TrackRanking> MapTrackRankingWithUserInfo(TrackRanking trackRanking) =>
             new TrackRanking()
