@@ -115,7 +115,7 @@ namespace DexQuiz.Core.Services
         {
             IEnumerable<TrackRanking> trackRankings = null;
             if (date.HasValue)
-                trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null && r.StartedAtUtc.Date == date); 
+                trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null && r.StartedAtUtc.Date == date.Value.Date);
             else
                 trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null);
 
