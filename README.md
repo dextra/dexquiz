@@ -1,5 +1,7 @@
 # DexQuiz
 
+In progress
+
 # Adding migrations
 
 You can add migrations using this command
