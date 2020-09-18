@@ -25,5 +25,12 @@ namespace DexQuiz.Infrastructure.Repositories
 
             return await available.CountAsync() == await answered.CountAsync();
         }
+
+        public async Task Teste()
+        {
+
+            
+
+        }
     }
 }

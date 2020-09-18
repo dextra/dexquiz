@@ -58,9 +58,9 @@ namespace DexQuiz.Infrastructure
 
         public static void MigrateDatabase(this IServiceProvider serviceProvider)
         {
-            using var serviceScope = serviceProvider.CreateScope();
-            var context = serviceScope.ServiceProvider.GetService<DexQuizContext>();
-            context.Database.Migrate();
+            //using var serviceScope = serviceProvider.CreateScope();
+            //var context = serviceScope.ServiceProvider.GetService<DexQuizContext>();
+            //context.Database.Migrate();
         }
     }
 }

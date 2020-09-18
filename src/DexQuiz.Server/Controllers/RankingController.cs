@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using DexQuiz.Core.Entities;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DexQuiz.Server.Controllers
@@ -59,6 +59,31 @@ namespace DexQuiz.Server.Controllers
             };
 
             return Ok(_mapper.Map<TrackRankingModel[]>(trackRankings));
+        }
+
+        /// <summary>
+        /// Show all available tracks with your respective ranking.
+        /// </summary>
+        /// <param name="top">Number of ranking positions to be fetched</param>
+        /// <response code="200">Returns the track with ranking</response>
+        [HttpGet("trackwithranking")]
+        [ProducesResponseType(typeof(IEnumerable<TrackWithRankingModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllAvailablesTrackWithRankings
+        (
+            [FromQuery(Name = "top")] int? top = null
+        )
+        {
+            bool isUserAdmin = this.IsLoggedUserAdmin();
+            int? userId = this.GetLoggedUserId();
+
+            var trackRankings = (isUserAdmin, userId) switch
+            {
+                (_, null) => await _rankingService.GetAllPublicTracksWithRankingsAsync(top),
+                (true, _) => await _rankingService.GetAllTracksWithRankingsForAdminAsync(top),
+                (false, _) => await _rankingService.GetAllTracksWithRankingsForUserAsync((int)userId, top)
+            };
+
+            return Ok(_mapper.Map<IEnumerable<TrackWithRankingModel>>(trackRankings));
         }
     }
 }
