@@ -39,7 +39,7 @@ namespace DexQuiz.Core.Services
             _trackService = trackService;
         }
 
-        public async Task<IEnumerable<TrackWithRanking>> GetAllPublicTracksWithRankingsAsync(int? top = null)
+        public async Task<IEnumerable<TrackWithRanking>> GetAllPublicTracksWithRankingsAsync(int? top = null, DateTime? date = null)
         {
             var availableTracks = await _trackService.GetAllAvailableTracksAsync();
             var taskList = new List<Task<TrackWithRanking>>();
@@ -48,7 +48,7 @@ namespace DexQuiz.Core.Services
             {
                 taskList.Add(Task.Run(async () =>
                 {
-                    var resultado = await GetPublicTrackRankingsAsync(track.Id, top);
+                    var resultado = await GetPublicTrackRankingsAsync(track.Id, top, date);
 
                     return new TrackWithRanking(track, resultado);
                 }));
@@ -57,7 +57,7 @@ namespace DexQuiz.Core.Services
             return await Task.WhenAll(taskList);
         }
 
-        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForAdminAsync(int? top = null)
+        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForAdminAsync(int? top = null, DateTime? date = null)
         {
             var availableTracks = await _trackService.GetAllAvailableTracksAsync();
             var taskList = new List<Task<TrackWithRanking>>();
@@ -66,7 +66,7 @@ namespace DexQuiz.Core.Services
             {
                 taskList.Add(Task.Run(async () =>
                 {
-                    var resultado = await GetTrackRankingsForAdminAsync(track.Id, top);
+                    var resultado = await GetTrackRankingsForAdminAsync(track.Id, top, date);
 
                     return new TrackWithRanking(track, resultado);
                 }));
@@ -75,7 +75,7 @@ namespace DexQuiz.Core.Services
             return await Task.WhenAll(taskList);
         }
 
-        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForUserAsync(int userId, int? top = null)
+        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForUserAsync(int userId, int? top = null, DateTime? date = null)
         {
             var availableTracks = await _trackService.GetAllAvailableTracksAsync();
             var taskList = new List<Task<TrackWithRanking>>();
@@ -84,7 +84,7 @@ namespace DexQuiz.Core.Services
             {
                 taskList.Add(Task.Run(async () =>
                 {
-                    var resultado = await GetTrackRankingsForUserAsync(track.Id, userId, top);
+                    var resultado = await GetTrackRankingsForUserAsync(track.Id, userId, top, date);
 
                     return new TrackWithRanking(track, resultado);
                 }));
