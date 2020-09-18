@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DexQuiz.Core.Entities;
 using DexQuiz.Core.Enums;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Server.Controllers;
 using DexQuiz.Server.Mappers;
@@ -50,7 +51,7 @@ namespace DexQuiz.Tests.Core.Services
             };
 
             var result = _userService.AddUser(userModel).Result;
-            Assert.IsTrue(result == expectedResult);
+            Assert.IsTrue(result.Result == expectedResult);
         }
 
         [TestCase("XPTO", "1932353645", "testdumb@test.com", "test123", UserType.Default, true)]
@@ -67,8 +68,8 @@ namespace DexQuiz.Tests.Core.Services
 
             var result = _userService.AddUser(userModel).Result;
 
-            Assert.IsTrue(result == expectedResult);
-            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
+            Assert.IsTrue(result.Result == expectedResult);
+            Assert.IsTrue(_userService.AddUser(userModel).Result.Result != expectedResult);
         }
 
         [TestCase("XPTO", "1912121212", "test@test.com", "test123", UserType.Default, true)]
@@ -86,8 +87,8 @@ namespace DexQuiz.Tests.Core.Services
 
             var result = _userService.AddUser(userModel).Result;
 
-            Assert.IsTrue(result == expectedResult);
-            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
+            Assert.IsTrue(result.Result == expectedResult);
+            Assert.IsTrue(_userService.AddUser(userModel).Result.Result != expectedResult);
         }
 
         [TestCase("TesteLoggedUser", "19123456789", "loggedSuccess@logged.com", "test123", UserType.Default, true)]
@@ -118,7 +119,7 @@ namespace DexQuiz.Tests.Core.Services
             };
 
             var result = _userController.GetLoggedUserAsync().Result != null;
-            Assert.IsTrue(resultAdd);
+            Assert.IsTrue(resultAdd.Result);
             Assert.IsTrue(result == expectedResult);
         }
 
@@ -138,7 +139,7 @@ namespace DexQuiz.Tests.Core.Services
             var resultAdd = _userService.AddUser(userModel).Result;
 
             var result = _userController.GetAsync(userId).Result != null;
-            Assert.IsTrue(resultAdd);
+            Assert.IsTrue(resultAdd.Result);
             Assert.IsTrue(result == expectedResult);
         }
     }

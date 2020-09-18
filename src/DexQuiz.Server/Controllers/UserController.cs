@@ -63,10 +63,10 @@ namespace DexQuiz.Server.Controllers
                 var userEntity = _mapper.Map<User>(newUser);
                 var result = await _userService.AddUser(userEntity);
 
-                if (result)
+                if (result.Result)
                     return CreatedAtRoute("GetUser", new { id = userEntity.Id }, userEntity);
                 else
-                    return BadRequest("Something wrong has happened");
+                    return BadRequest(result);
             }
             catch (Exception e)
             {
