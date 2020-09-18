@@ -90,7 +90,7 @@ namespace DexQuiz.Core.Services
 
             if (!await _questionService.DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
             {
-                return new ReturnData { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false });
+                return new ReturnData { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
 
             bool didUserCompleteTrack = await _questionService.HasUserFinishedTrackAsync(answeredQuestion.UserId, question.TrackId);
@@ -111,6 +111,10 @@ namespace DexQuiz.Core.Services
                 _trackRankingRepository.Update(trackRanking);
                 await _unitOfWork.CommitAsync();
                 return new ReturnData { Result = true };
+            }
+            else
+            {
+                return new ReturnData { Result = false };
             }
         }
 

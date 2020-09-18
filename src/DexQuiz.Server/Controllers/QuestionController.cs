@@ -206,15 +206,18 @@ namespace DexQuiz.Server.Controllers
 
             try
             {
-                var result = await _questionService.SaveAnsweredQuestionAsync(answeredQuestionEntity);
-                if (result.Result)
+                var resultQuestion = await _questionService.SaveAnsweredQuestionAsync(answeredQuestionEntity);
+                if (resultQuestion.Result)
                 {
-                    await _rankingService.UpdateRankingAfterUserAnswerAsync(answeredQuestionEntity);
-                    return NoContent();
+                    var resultRanking = await _rankingService.UpdateRankingAfterUserAnswerAsync(answeredQuestionEntity);
+                    if (resultRanking.Result)
+                        return Ok(resultQuestion);
+                    else
+                        return BadRequest(resultRanking);
                 }
                 else
                 {
-                    return BadRequest(result);
+                    return BadRequest(resultQuestion);
                 }
             }
             catch (Exception e)
