@@ -30,7 +30,6 @@
     <ProjectReference Include="..\DexQuiz.Client\DexQuiz.Client.csproj" />
     <ProjectReference Include="..\DexQuiz.Core\DexQuiz.Core.csproj" />
     <ProjectReference Include="..\DexQuiz.Infrastructure\DexQuiz.Infrastructure.csproj" />
-    <ProjectReference Include="..\DexQuiz.Shared\DexQuiz.Shared.csproj" />
   </ItemGroup>
 
 

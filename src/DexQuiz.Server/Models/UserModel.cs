@@ -23,6 +23,5 @@ namespace DexQuiz.Server.Models
         public bool AllowContact { get; set; }
 
         public string Linkedin { get; set; }
-
     }
 }
