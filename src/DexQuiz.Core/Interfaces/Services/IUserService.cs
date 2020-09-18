@@ -1,4 +1,5 @@
 ﻿using DexQuiz.Core.Entities;
+using DexQuiz.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ namespace DexQuiz.Core.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<bool> AddUser(User user);
+        Task<ProcessResult> AddUser(User user);
         Task<User> FindUserById(int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DexQuiz.Core.Entities;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Repositories;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Core.Interfaces.UoW;
@@ -92,20 +93,20 @@ namespace DexQuiz.Core.Services
             return await Task.WhenAll(taskList);
         }
 
-        public async Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null) =>
-            (await GetOrderedTrackRankingsAsync(trackId))
+        public async Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null, DateTime? date = null) =>
+            (await GetOrderedTrackRankingsAsync(trackId, date))
             .Take(top ?? DefaultNumberOfRankingsFetched)
             .Select(MapTrackRankingWithoutUserInfo);
 
-        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int trackId, int? top = null) =>
-            (await GetOrderedTrackRankingsAsync(trackId))
+        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int trackId, int? top = null, DateTime? date = null) =>
+            (await GetOrderedTrackRankingsAsync(trackId, date))
             .Take(top ?? DefaultNumberOfRankingsFetched)
             .Select(async tr => await MapTrackRankingWithUserInfo(tr))
             .Select(tr => tr.Result);
 
-        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null)
+        public async Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null, DateTime? date = null)
         {
-            var trackRankings = await GetOrderedTrackRankingsAsync(trackId);
+            var trackRankings = await GetOrderedTrackRankingsAsync(trackId, date);
             var topRankings = trackRankings.Take(top ?? DefaultNumberOfRankingsFetched);
             var userTrackRanking = trackRankings.FirstOrDefault(tr => tr.UserId == userId);
 
@@ -138,14 +139,14 @@ namespace DexQuiz.Core.Services
             }
         }
 
-        public async Task UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion)
+        public async Task<ProcessResult> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion)
         {
             var question = await _questionRepository.FindAsync(answeredQuestion.QuestionId);
             var answer = await _answerRepository.FindAsync(answeredQuestion.AnswerId);
 
             if (!await _questionService.DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
             {
-                throw new Exception("A resposta não é uma das respostas possíveis para a questão.");
+                return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
 
             bool didUserCompleteTrack = await _questionService.HasUserFinishedTrackAsync(answeredQuestion.UserId, question.TrackId);
@@ -165,14 +166,26 @@ namespace DexQuiz.Core.Services
                 }
                 _trackRankingRepository.Update(trackRanking);
                 await _unitOfWork.CommitAsync();
+                return new ProcessResult { Result = true };
+            }
+            else
+            {
+                return new ProcessResult { Result = false };
             }
         }
 
-        private async Task<IEnumerable<TrackRanking>> GetOrderedTrackRankingsAsync(int trackId) =>
-            (await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null))
-                                              .OrderByDescending(r => r.Points)
-                                              .ThenBy(r => r.CompletedTime)
-                                              .Select(MapTrackRankingInsertingPosition);
+        private async Task<IEnumerable<TrackRanking>> GetOrderedTrackRankingsAsync(int trackId, DateTime? date)
+        {
+            IEnumerable<TrackRanking> trackRankings = null;
+            if (date.HasValue)
+                trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null && r.StartedAtUtc.Date == date.Value.Date);
+            else
+                trackRankings = await _trackRankingRepository.FindAsync(r => r.TrackId == trackId && r.CompletedTime != null);
+
+            return trackRankings.OrderByDescending(r => r.Points)
+                                .ThenBy(r => r.CompletedTime)
+                                .Select(MapTrackRankingInsertingPosition);
+        }
 
         private async Task<TrackRanking> MapTrackRankingWithUserInfo(TrackRanking trackRanking) =>
             new TrackRanking()

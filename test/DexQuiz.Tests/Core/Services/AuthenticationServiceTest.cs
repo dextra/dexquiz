@@ -54,7 +54,7 @@ namespace DexQuiz.Tests.Core.Services
             var user = _userService.FindUserById(1).Result;
             var token = _authenticationService.GenerateAuthenticationAsync(userEmail).Result;
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.Result);
             Assert.IsNotNull(user);
             Assert.IsNotNull(token);
             Assert.IsTrue(tokenHandler.CanReadToken(token));
@@ -75,7 +75,7 @@ namespace DexQuiz.Tests.Core.Services
             var userResult = _userService.AddUser(userModel).Result;
             var user = _userService.FindUserById(1).Result;
 
-            Assert.IsTrue(userResult);
+            Assert.IsTrue(userResult.Result);
             Assert.IsNotNull(user);
             Assert.IsTrue(_authenticationService.ValidateCredentialsAsync(userEmail, userPassword).Result);
             Assert.IsFalse(_authenticationService.ValidateCredentialsAsync(userEmail, wrongPassword).Result);
