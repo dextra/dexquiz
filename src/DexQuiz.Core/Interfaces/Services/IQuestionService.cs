@@ -1,4 +1,5 @@
 ﻿using DexQuiz.Core.Entities;
+using DexQuiz.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,17 +9,17 @@ namespace DexQuiz.Core.Interfaces.Services
 {
     public interface IQuestionService
     {
-        Task<bool> AddQuestionAsync(Question question);
+        Task<ReturnData> AddQuestionAsync(Question question);
         Task<Question> FindQuestionByIdAsync(int id);
         Task<IEnumerable<Question>> GetTrackQuestionsAsync(int trackId);
-        Task UpdateQuestionAsync(Question question);
-        Task DeleteQuestionAsync(int questionId);
+        Task<ReturnData> UpdateQuestionAsync(Question question);
+        Task<ReturnData> DeleteQuestionAsync(int questionId);
         Task InitializeQuestionsForUserIfNotCreatedAsync(int userId, int trackId);
         Task<Question> PickQuestionForUserAsync(int userId, int trackId);
         Task<int> PickProgressForUserAsync(int userId, int trackId);
         Task<bool> HasQuestionBeenAnsweredByUserAsync(int userId, int questionId);
         Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId);
-        Task SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion);
+        Task<ReturnData> SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion);
         Task<bool> HasUserFinishedTrackAsync(int userId, int trackId);
         Task<bool> HasUserFinishedTrackAsync(AnsweredQuestion answeredQuestion);
     }

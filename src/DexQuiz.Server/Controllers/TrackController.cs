@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DexQuiz.Core.Entities;
 using DexQuiz.Core.Enums;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Server.Models;
 using DexQuiz.Server.Models.Authentication;
@@ -92,7 +93,7 @@ namespace DexQuiz.Server.Controllers
             {
                 var trackEntity = _mapper.Map<Track>(trackModel);
                 if (id != trackEntity.Id)
-                    return BadRequest("Track id from URI and from model should be the same.");
+                    return BadRequest(new ReturnData { Message = "Track id from URI and from model should be the same.", Result = false });
                 else
                 {
                     await _trackService.UpdateTrackAsync(trackEntity);
@@ -101,7 +102,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ReturnData { Message = e.Message, Result = false });
             }
         }
 
@@ -123,7 +124,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ReturnData { Message = e.Message, Result = false });
             }
         }
     }

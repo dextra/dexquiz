@@ -1,4 +1,5 @@
 ﻿using DexQuiz.Core.Entities;
+using DexQuiz.Core.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,6 @@ namespace DexQuiz.Core.Interfaces.Services
         Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int trackId, int? top = null);
         Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null);
         Task InitializeRankingIfNotCreatedAsync(int userId, int trackId);
-        Task UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion);
+        Task<ReturnData> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion);
     }
 }

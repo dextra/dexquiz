@@ -1,4 +1,5 @@
 ﻿using DexQuiz.Core.Entities;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Repositories;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Core.Interfaces.UoW;
@@ -21,23 +22,24 @@ namespace DexQuiz.Core.Services
             _userRepository = userRepository;
         }
 
-        public async Task<bool> AddUser(User user)
+        public async Task<ReturnData> AddUser(User user)
         {
             try
             {
                 if (!await IsEmailAvailable(user.Email)) 
-                    throw new Exception("Já existe um cadastro com esse e-mail");
+                    return new ReturnData { Message = "Já existe um cadastro com esse e-mail", Result = false };
                 
-                if (!await IsCellPhoneAvailable(user.CellPhone)) 
-                    throw new Exception("Já existe um cadastro com esse celular");
+                if (!await IsCellPhoneAvailable(user.CellPhone))
+                    return new ReturnData { Message = "Já existe um cadastro com esse celular", Result = false };
 
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.CommitAsync();
-                return true;
+
+                return new ReturnData { Message = "Usuário adicionado com sucesso", Result = true };
             }
             catch (Exception e)
             {
-                throw e;
+                return new ReturnData { Message = e.Message, Result = false };
             }
         }
 

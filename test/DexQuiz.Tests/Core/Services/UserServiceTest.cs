@@ -50,7 +50,7 @@ namespace DexQuiz.Tests.Core.Services
             };
 
             var result = _userService.AddUser(userModel).Result;
-            Assert.IsTrue(result == expectedResult);
+            Assert.IsTrue(result.Result == expectedResult);
         }
 
         [TestCase("XPTO", "1932353645", "testdumb@test.com", "test123", UserType.Default, true)]
@@ -67,7 +67,7 @@ namespace DexQuiz.Tests.Core.Services
 
             var result = _userService.AddUser(userModel).Result;
 
-            Assert.IsTrue(result == expectedResult);
+            Assert.IsTrue(result.Result == expectedResult);
             Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
         }
 
@@ -86,7 +86,7 @@ namespace DexQuiz.Tests.Core.Services
 
             var result = _userService.AddUser(userModel).Result;
 
-            Assert.IsTrue(result == expectedResult);
+            Assert.IsTrue(result.Result == expectedResult);
             Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
         }
 
@@ -118,7 +118,7 @@ namespace DexQuiz.Tests.Core.Services
             };
 
             var result = _userController.GetLoggedUserAsync().Result != null;
-            Assert.IsTrue(resultAdd);
+            Assert.IsTrue(resultAdd.Result);
             Assert.IsTrue(result == expectedResult);
         }
 
@@ -138,7 +138,7 @@ namespace DexQuiz.Tests.Core.Services
             var resultAdd = _userService.AddUser(userModel).Result;
 
             var result = _userController.GetAsync(userId).Result != null;
-            Assert.IsTrue(resultAdd);
+            Assert.IsTrue(resultAdd.Result);
             Assert.IsTrue(result == expectedResult);
         }
     }
