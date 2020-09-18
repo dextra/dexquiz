@@ -9,7 +9,7 @@ namespace DexQuiz.Core.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<ReturnData> AddUser(User user);
+        Task<ProcessResult> AddUser(User user);
         Task<User> FindUserById(int id);
     }
 }

@@ -93,7 +93,7 @@ namespace DexQuiz.Server.Controllers
             {
                 var trackEntity = _mapper.Map<Track>(trackModel);
                 if (id != trackEntity.Id)
-                    return BadRequest(new ReturnData { Message = "Track id from URI and from model should be the same.", Result = false });
+                    return BadRequest(new ProcessResult { Message = "Track id from URI and from model should be the same.", Result = false });
                 else
                 {
                     await _trackService.UpdateTrackAsync(trackEntity);
@@ -102,7 +102,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -124,7 +124,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
     }

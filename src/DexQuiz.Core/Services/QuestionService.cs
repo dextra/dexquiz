@@ -38,31 +38,31 @@ namespace DexQuiz.Core.Services
             _availableQuestionRepository = availableQuestionRepository;
         }
 
-        public async Task<ReturnData> AddQuestionAsync(Question question)
+        public async Task<ProcessResult> AddQuestionAsync(Question question)
         {
             if (!await IsTrackAvailableAsync(question.TrackId))
             {
-                return new ReturnData { Message = $"O Id de trilha {question.TrackId} não está disponível", Result = false };
+                return new ProcessResult { Message = $"O Id de trilha {question.TrackId} não está disponível", Result = false };
             }
             else if (question.Answers.Count <= 1)
             {
-                return new ReturnData { Message = "A questão deve ter mais de uma alternativa possível.", Result = false };
+                return new ProcessResult { Message = "A questão deve ter mais de uma alternativa possível.", Result = false };
             }
             else if (question.Answers.Count(q => q.IsAnswerCorrect) != 1)
             {
-                return new ReturnData { Message = "A questão deve ter apenas uma resposta correta.", Result = false };
+                return new ProcessResult { Message = "A questão deve ter apenas uma resposta correta.", Result = false };
             }
 
             await _questionRepository.AddAsync(question);
             await _unitOfWork.CommitAsync();
-            return new ReturnData { Result = true, Message = "Pergunta adicionada com sucesso" };
+            return new ProcessResult { Result = true, Message = "Pergunta adicionada com sucesso" };
         }
 
-        public async Task<ReturnData> DeleteQuestionAsync(int questionId)
+        public async Task<ProcessResult> DeleteQuestionAsync(int questionId)
         {
             if (await DoesQuestionHaveUserAnswersAsync(questionId))
             {
-                return new ReturnData { Message = "A questão não pode ser excluída, pois usuários já responderam ela.", Result = false };
+                return new ProcessResult { Message = "A questão não pode ser excluída, pois usuários já responderam ela.", Result = false };
             }
 
             foreach (var existingAnswer in await _answerRepository.FindAsync(a => a.QuestionId == questionId))
@@ -72,7 +72,7 @@ namespace DexQuiz.Core.Services
             var question = await FindQuestionByIdAsync(questionId);
             _questionRepository.Remove(question);
             await _unitOfWork.CommitAsync();
-            return new ReturnData { Message = "Pergunta deletada com sucesso", Result = true };
+            return new ProcessResult { Message = "Pergunta deletada com sucesso", Result = true };
         }
 
         public async Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId)
@@ -141,40 +141,40 @@ namespace DexQuiz.Core.Services
                    .FirstOrDefault();
         }
 
-        public async Task<ReturnData> SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion)
+        public async Task<ProcessResult> SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion)
         {
             if (await HasUserFinishedTrackAsync(answeredQuestion))
             {
-                return new ReturnData { Message = "O usuário já completou todas as suas questões da trilha.", Result = false };
+                return new ProcessResult { Message = "O usuário já completou todas as suas questões da trilha.", Result = false };
             }
             else if (await HasQuestionBeenAnsweredByUserAsync(answeredQuestion.UserId, answeredQuestion.QuestionId))
             {
-                return new ReturnData { Message = "O usuário já respondeu essa questão.", Result = false };
+                return new ProcessResult { Message = "O usuário já respondeu essa questão.", Result = false };
             }
             else if (!await DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
             {
-                return new ReturnData { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
+                return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
 
             await _answeredQuestionRepository.AddAsync(answeredQuestion);
             await _unitOfWork.CommitAsync();
 
-            return new ReturnData { Message = "Pergunta respondida com sucesso", Result = true };
+            return new ProcessResult { Message = "Pergunta respondida com sucesso", Result = true };
         }
 
-        public async Task<ReturnData> UpdateQuestionAsync(Question question)
+        public async Task<ProcessResult> UpdateQuestionAsync(Question question)
         {
             if (await DoesQuestionHaveUserAnswersAsync(question.Id))
             {
-                return new ReturnData { Message = "A questão não pode ser alterada, pois usuários já responderam ela.", Result = false };
+                return new ProcessResult { Message = "A questão não pode ser alterada, pois usuários já responderam ela.", Result = false };
             }
             else if (question.Answers.Count <= 1)
             {
-                return new ReturnData { Message = "A questão deve ter mais de uma alternativa possível.", Result = false };
+                return new ProcessResult { Message = "A questão deve ter mais de uma alternativa possível.", Result = false };
             }
             else if (question.Answers.Count(q => q.IsAnswerCorrect) != 1)
             {
-                return new ReturnData { Message = "A questão deve ter apenas uma resposta correta.", Result = false };
+                return new ProcessResult { Message = "A questão deve ter apenas uma resposta correta.", Result = false };
             }
 
             foreach (var existingAnswer in await _answerRepository.FindAsync(a => a.QuestionId == question.Id))
@@ -187,7 +187,7 @@ namespace DexQuiz.Core.Services
             }
             _questionRepository.Update(question);
             await _unitOfWork.CommitAsync();
-            return new ReturnData { Message = "Pergunta atualizada com sucesso", Result = true };
+            return new ProcessResult { Message = "Pergunta atualizada com sucesso", Result = true };
         }
 
         private async Task<bool> IsTrackAvailableAsync(int trackId) =>

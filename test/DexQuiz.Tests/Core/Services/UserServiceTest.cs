@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DexQuiz.Core.Entities;
 using DexQuiz.Core.Enums;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Server.Controllers;
 using DexQuiz.Server.Mappers;
@@ -68,7 +69,7 @@ namespace DexQuiz.Tests.Core.Services
             var result = _userService.AddUser(userModel).Result;
 
             Assert.IsTrue(result.Result == expectedResult);
-            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
+            Assert.IsTrue(_userService.AddUser(userModel).Result.Result != expectedResult);
         }
 
         [TestCase("XPTO", "1912121212", "test@test.com", "test123", UserType.Default, true)]
@@ -87,7 +88,7 @@ namespace DexQuiz.Tests.Core.Services
             var result = _userService.AddUser(userModel).Result;
 
             Assert.IsTrue(result.Result == expectedResult);
-            Assert.ThrowsAsync(typeof(Exception), () => _userService.AddUser(userModel));
+            Assert.IsTrue(_userService.AddUser(userModel).Result.Result != expectedResult);
         }
 
         [TestCase("TesteLoggedUser", "19123456789", "loggedSuccess@logged.com", "test123", UserType.Default, true)]

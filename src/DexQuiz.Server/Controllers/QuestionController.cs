@@ -80,7 +80,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -100,7 +100,7 @@ namespace DexQuiz.Server.Controllers
             {
                 if (questionEntity.Id != id)
                 {
-                    return BadRequest(new ReturnData { Message = "O id da questão na URI deve ser igual ao id no objeto.", Result = false });
+                    return BadRequest(new ProcessResult { Message = "O id da questão na URI deve ser igual ao id no objeto.", Result = false });
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -137,7 +137,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -165,7 +165,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -187,7 +187,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -222,7 +222,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new ReturnData { Message = e.Message, Result = false });
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 

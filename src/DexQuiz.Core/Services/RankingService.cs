@@ -82,14 +82,14 @@ namespace DexQuiz.Core.Services
             }
         }
 
-        public async Task<ReturnData> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion)
+        public async Task<ProcessResult> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion)
         {
             var question = await _questionRepository.FindAsync(answeredQuestion.QuestionId);
             var answer = await _answerRepository.FindAsync(answeredQuestion.AnswerId);
 
             if (!await _questionService.DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
             {
-                return new ReturnData { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
+                return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
 
             bool didUserCompleteTrack = await _questionService.HasUserFinishedTrackAsync(answeredQuestion.UserId, question.TrackId);
@@ -109,11 +109,11 @@ namespace DexQuiz.Core.Services
                 }
                 _trackRankingRepository.Update(trackRanking);
                 await _unitOfWork.CommitAsync();
-                return new ReturnData { Result = true };
+                return new ProcessResult { Result = true };
             }
             else
             {
-                return new ReturnData { Result = false };
+                return new ProcessResult { Result = false };
             }
         }
 

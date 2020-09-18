@@ -22,24 +22,24 @@ namespace DexQuiz.Core.Services
             _userRepository = userRepository;
         }
 
-        public async Task<ReturnData> AddUser(User user)
+        public async Task<ProcessResult> AddUser(User user)
         {
             try
             {
                 if (!await IsEmailAvailable(user.Email)) 
-                    return new ReturnData { Message = "Já existe um cadastro com esse e-mail", Result = false };
+                    return new ProcessResult { Message = "Já existe um cadastro com esse e-mail", Result = false };
                 
                 if (!await IsCellPhoneAvailable(user.CellPhone))
-                    return new ReturnData { Message = "Já existe um cadastro com esse celular", Result = false };
+                    return new ProcessResult { Message = "Já existe um cadastro com esse celular", Result = false };
 
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.CommitAsync();
 
-                return new ReturnData { Message = "Usuário adicionado com sucesso", Result = true };
+                return new ProcessResult { Message = "Usuário adicionado com sucesso", Result = true };
             }
             catch (Exception e)
             {
-                return new ReturnData { Message = e.Message, Result = false };
+                return new ProcessResult { Message = e.Message, Result = false };
             }
         }
 
