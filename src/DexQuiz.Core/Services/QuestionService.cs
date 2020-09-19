@@ -1,5 +1,6 @@
 ﻿using DexQuiz.Core.Entities;
 using DexQuiz.Core.Enums;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Repositories;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Core.Interfaces.UoW;
@@ -37,31 +38,31 @@ namespace DexQuiz.Core.Services
             _availableQuestionRepository = availableQuestionRepository;
         }
 
-        public async Task<bool> AddQuestionAsync(Question question)
+        public async Task<ProcessResult> AddQuestionAsync(Question question)
         {
             if (!await IsTrackAvailableAsync(question.TrackId))
             {
-                throw new Exception($"This track id {question.TrackId} is not available");
+                return new ProcessResult { Message = $"O Id de trilha {question.TrackId} não está disponível", Result = false };
             }
             else if (question.Answers.Count <= 1)
             {
-                throw new Exception("A questão deve ter mais de uma alternativa possível.");
+                return new ProcessResult { Message = "A questão deve ter mais de uma alternativa possível.", Result = false };
             }
             else if (question.Answers.Count(q => q.IsAnswerCorrect) != 1)
             {
-                throw new Exception("A questão deve ter apenas uma resposta correta.");
+                return new ProcessResult { Message = "A questão deve ter apenas uma resposta correta.", Result = false };
             }
 
             await _questionRepository.AddAsync(question);
             await _unitOfWork.CommitAsync();
-            return true;
+            return new ProcessResult { Result = true, Message = "Pergunta adicionada com sucesso" };
         }
 
-        public async Task DeleteQuestionAsync(int questionId)
+        public async Task<ProcessResult> DeleteQuestionAsync(int questionId)
         {
             if (await DoesQuestionHaveUserAnswersAsync(questionId))
             {
-                throw new Exception("A questão não pode ser excluída, pois usuários já responderam ela.");
+                return new ProcessResult { Message = "A questão não pode ser excluída, pois usuários já responderam ela.", Result = false };
             }
 
             foreach (var existingAnswer in await _answerRepository.FindAsync(a => a.QuestionId == questionId))
@@ -71,6 +72,7 @@ namespace DexQuiz.Core.Services
             var question = await FindQuestionByIdAsync(questionId);
             _questionRepository.Remove(question);
             await _unitOfWork.CommitAsync();
+            return new ProcessResult { Message = "Pergunta deletada com sucesso", Result = true };
         }
 
         public async Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId)
@@ -139,38 +141,40 @@ namespace DexQuiz.Core.Services
                    .FirstOrDefault();
         }
 
-        public async Task SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion)
+        public async Task<ProcessResult> SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion)
         {
             if (await HasUserFinishedTrackAsync(answeredQuestion))
             {
-                throw new Exception("O usuário já completou todas as suas questões da trilha.");
+                return new ProcessResult { Message = "O usuário já completou todas as suas questões da trilha.", Result = false };
             }
             else if (await HasQuestionBeenAnsweredByUserAsync(answeredQuestion.UserId, answeredQuestion.QuestionId))
             {
-                throw new Exception("O usuário já respondeu essa questão.");
+                return new ProcessResult { Message = "O usuário já respondeu essa questão.", Result = false };
             }
             else if (!await DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
             {
-                throw new Exception("A resposta não é uma das respostas possíveis para a questão.");
+                return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
 
             await _answeredQuestionRepository.AddAsync(answeredQuestion);
             await _unitOfWork.CommitAsync();
+
+            return new ProcessResult { Message = "Pergunta respondida com sucesso", Result = true };
         }
 
-        public async Task UpdateQuestionAsync(Question question)
+        public async Task<ProcessResult> UpdateQuestionAsync(Question question)
         {
             if (await DoesQuestionHaveUserAnswersAsync(question.Id))
             {
-                throw new Exception("A questão não pode ser alterada, pois usuários já responderam ela.");
+                return new ProcessResult { Message = "A questão não pode ser alterada, pois usuários já responderam ela.", Result = false };
             }
             else if (question.Answers.Count <= 1)
             {
-                throw new Exception("A questão deve ter mais de uma alternativa possível.");
+                return new ProcessResult { Message = "A questão deve ter mais de uma alternativa possível.", Result = false };
             }
             else if (question.Answers.Count(q => q.IsAnswerCorrect) != 1)
             {
-                throw new Exception("A questão deve ter apenas uma resposta correta.");
+                return new ProcessResult { Message = "A questão deve ter apenas uma resposta correta.", Result = false };
             }
 
             foreach (var existingAnswer in await _answerRepository.FindAsync(a => a.QuestionId == question.Id))
@@ -183,6 +187,7 @@ namespace DexQuiz.Core.Services
             }
             _questionRepository.Update(question);
             await _unitOfWork.CommitAsync();
+            return new ProcessResult { Message = "Pergunta atualizada com sucesso", Result = true };
         }
 
         private async Task<bool> IsTrackAvailableAsync(int trackId) =>

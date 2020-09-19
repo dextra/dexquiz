@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DexQuiz.Core.Entities;
 using DexQuiz.Core.Enums;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Server.Models;
 using DexQuiz.Server.Models.Authentication;
@@ -70,16 +71,16 @@ namespace DexQuiz.Server.Controllers
                 var questionEntity = _mapper.Map<Question>(question);
                 var result = await _questionService.AddQuestionAsync(questionEntity);
 
-                if (result)
+                if (result.Result)
                     return CreatedAtRoute("GetQuestion",
                                           new { id = questionEntity.Id },
                                           _mapper.Map<QuestionModel>(questionEntity));
                 else
-                    return BadRequest("Something wrong has happened");
+                    return BadRequest(result);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -99,7 +100,7 @@ namespace DexQuiz.Server.Controllers
             {
                 if (questionEntity.Id != id)
                 {
-                    return BadRequest("O id da questão na URI deve ser igual ao id no objeto.");
+                    return BadRequest(new ProcessResult { Message = "O id da questão na URI deve ser igual ao id no objeto.", Result = false });
                 }
                 else
                 {
@@ -109,7 +110,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -124,12 +125,19 @@ namespace DexQuiz.Server.Controllers
         {
             try
             {
-                await _questionService.DeleteQuestionAsync(id);
-                return NoContent();
+                var result = await _questionService.DeleteQuestionAsync(id);
+                if (result.Result)
+                {
+                    return NoContent();
+                }                
+                else
+                {
+                    return BadRequest(result);
+                }
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -157,7 +165,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -179,7 +187,7 @@ namespace DexQuiz.Server.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 
@@ -198,13 +206,23 @@ namespace DexQuiz.Server.Controllers
 
             try
             {
-                await _questionService.SaveAnsweredQuestionAsync(answeredQuestionEntity);
-                await _rankingService.UpdateRankingAfterUserAnswerAsync(answeredQuestionEntity);
-                return NoContent();
+                var resultQuestion = await _questionService.SaveAnsweredQuestionAsync(answeredQuestionEntity);
+                if (resultQuestion.Result)
+                {
+                    var resultRanking = await _rankingService.UpdateRankingAfterUserAnswerAsync(answeredQuestionEntity);
+                    if (resultRanking.Result)
+                        return Ok(resultQuestion);
+                    else
+                        return BadRequest(resultRanking);
+                }
+                else
+                {
+                    return BadRequest(resultQuestion);
+                }
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProcessResult { Message = e.Message, Result = false });
             }
         }
 

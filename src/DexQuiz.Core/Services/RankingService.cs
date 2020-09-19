@@ -1,4 +1,5 @@
 ﻿using DexQuiz.Core.Entities;
+using DexQuiz.Core.Exceptions;
 using DexQuiz.Core.Interfaces.Repositories;
 using DexQuiz.Core.Interfaces.Services;
 using DexQuiz.Core.Interfaces.UoW;
@@ -17,15 +18,17 @@ namespace DexQuiz.Core.Services
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
         private readonly IQuestionService _questionService;
-        
+        private readonly ITrackService _trackService;
+
         private const int DefaultNumberOfRankingsFetched = 3;
 
-        public RankingService(IUnitOfWork unitOfWork, 
+        public RankingService(IUnitOfWork unitOfWork,
             ITrackRankingRepository trackRankingRepository,
             IUserRepository userRepository,
             IQuestionRepository questionRepository,
             IAnswerRepository answerRepository,
-            IQuestionService questionService)
+            IQuestionService questionService,
+            ITrackService trackService)
         {
             _unitOfWork = unitOfWork;
             _trackRankingRepository = trackRankingRepository;
@@ -33,6 +36,61 @@ namespace DexQuiz.Core.Services
             _questionRepository = questionRepository;
             _answerRepository = answerRepository;
             _questionService = questionService;
+            _trackService = trackService;
+        }
+
+        public async Task<IEnumerable<TrackWithRanking>> GetAllPublicTracksWithRankingsAsync(int? top = null, DateTime? date = null)
+        {
+            var availableTracks = await _trackService.GetAllAvailableTracksAsync();
+            var taskList = new List<Task<TrackWithRanking>>();
+
+            Parallel.ForEach(availableTracks, (track) =>
+            {
+                taskList.Add(Task.Run(async () =>
+                {
+                    var resultado = await GetPublicTrackRankingsAsync(track.Id, top, date);
+
+                    return new TrackWithRanking(track, resultado);
+                }));
+            });
+
+            return await Task.WhenAll(taskList);
+        }
+
+        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForAdminAsync(int? top = null, DateTime? date = null)
+        {
+            var availableTracks = await _trackService.GetAllAvailableTracksAsync();
+            var taskList = new List<Task<TrackWithRanking>>();
+
+            Parallel.ForEach(availableTracks, (track) =>
+            {
+                taskList.Add(Task.Run(async () =>
+                {
+                    var resultado = await GetTrackRankingsForAdminAsync(track.Id, top, date);
+
+                    return new TrackWithRanking(track, resultado);
+                }));
+            });
+
+            return await Task.WhenAll(taskList);
+        }
+
+        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForUserAsync(int userId, int? top = null, DateTime? date = null)
+        {
+            var availableTracks = await _trackService.GetAllAvailableTracksAsync();
+            var taskList = new List<Task<TrackWithRanking>>();
+
+            Parallel.ForEach(availableTracks, (track) =>
+            {
+                taskList.Add(Task.Run(async () =>
+                {
+                    var resultado = await GetTrackRankingsForUserAsync(track.Id, userId, top, date);
+
+                    return new TrackWithRanking(track, resultado);
+                }));
+            });
+
+            return await Task.WhenAll(taskList);
         }
 
         public async Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null, DateTime? date = null) =>
@@ -81,14 +139,14 @@ namespace DexQuiz.Core.Services
             }
         }
 
-        public async Task UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion)
+        public async Task<ProcessResult> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion)
         {
             var question = await _questionRepository.FindAsync(answeredQuestion.QuestionId);
             var answer = await _answerRepository.FindAsync(answeredQuestion.AnswerId);
 
             if (!await _questionService.DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
             {
-                throw new Exception("A resposta não é uma das respostas possíveis para a questão.");
+                return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
 
             bool didUserCompleteTrack = await _questionService.HasUserFinishedTrackAsync(answeredQuestion.UserId, question.TrackId);
@@ -108,6 +166,11 @@ namespace DexQuiz.Core.Services
                 }
                 _trackRankingRepository.Update(trackRanking);
                 await _unitOfWork.CommitAsync();
+                return new ProcessResult { Result = true };
+            }
+            else
+            {
+                return new ProcessResult { Result = false };
             }
         }
 
