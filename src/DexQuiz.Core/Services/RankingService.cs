@@ -18,15 +18,17 @@ namespace DexQuiz.Core.Services
         private readonly IQuestionRepository _questionRepository;
         private readonly IAnswerRepository _answerRepository;
         private readonly IQuestionService _questionService;
-        
+        private readonly ITrackService _trackService;
+
         private const int DefaultNumberOfRankingsFetched = 3;
 
-        public RankingService(IUnitOfWork unitOfWork, 
+        public RankingService(IUnitOfWork unitOfWork,
             ITrackRankingRepository trackRankingRepository,
             IUserRepository userRepository,
             IQuestionRepository questionRepository,
             IAnswerRepository answerRepository,
-            IQuestionService questionService)
+            IQuestionService questionService,
+            ITrackService trackService)
         {
             _unitOfWork = unitOfWork;
             _trackRankingRepository = trackRankingRepository;
@@ -34,6 +36,61 @@ namespace DexQuiz.Core.Services
             _questionRepository = questionRepository;
             _answerRepository = answerRepository;
             _questionService = questionService;
+            _trackService = trackService;
+        }
+
+        public async Task<IEnumerable<TrackWithRanking>> GetAllPublicTracksWithRankingsAsync(int? top = null, DateTime? date = null)
+        {
+            var availableTracks = await _trackService.GetAllAvailableTracksAsync();
+            var taskList = new List<Task<TrackWithRanking>>();
+
+            Parallel.ForEach(availableTracks, (track) =>
+            {
+                taskList.Add(Task.Run(async () =>
+                {
+                    var resultado = await GetPublicTrackRankingsAsync(track.Id, top, date);
+
+                    return new TrackWithRanking(track, resultado);
+                }));
+            });
+
+            return await Task.WhenAll(taskList);
+        }
+
+        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForAdminAsync(int? top = null, DateTime? date = null)
+        {
+            var availableTracks = await _trackService.GetAllAvailableTracksAsync();
+            var taskList = new List<Task<TrackWithRanking>>();
+
+            Parallel.ForEach(availableTracks, (track) =>
+            {
+                taskList.Add(Task.Run(async () =>
+                {
+                    var resultado = await GetTrackRankingsForAdminAsync(track.Id, top, date);
+
+                    return new TrackWithRanking(track, resultado);
+                }));
+            });
+
+            return await Task.WhenAll(taskList);
+        }
+
+        public async Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForUserAsync(int userId, int? top = null, DateTime? date = null)
+        {
+            var availableTracks = await _trackService.GetAllAvailableTracksAsync();
+            var taskList = new List<Task<TrackWithRanking>>();
+
+            Parallel.ForEach(availableTracks, (track) =>
+            {
+                taskList.Add(Task.Run(async () =>
+                {
+                    var resultado = await GetTrackRankingsForUserAsync(track.Id, userId, top, date);
+
+                    return new TrackWithRanking(track, resultado);
+                }));
+            });
+
+            return await Task.WhenAll(taskList);
         }
 
         public async Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null, DateTime? date = null) =>
