@@ -8,5 +8,9 @@ namespace DexQuiz.Client.Features.Track
 {
     public partial class TrackState : State<TrackState>
     {
+        public override void Initialize()
+        {
+            
+        }
     }
 }

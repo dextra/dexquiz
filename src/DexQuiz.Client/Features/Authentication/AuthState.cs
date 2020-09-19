@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DexQuiz.Client.Features.Authentication
 {
-    public partial class AuthenticationState : State<AuthenticationState>
+    public partial class AuthState : State<AuthState>
     {
         public bool IsLoading { get; private set; }
         public string Message { get; private set; }

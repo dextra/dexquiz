@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DexQuiz.Client.Features.Authentication
 {
-    public partial class AuthenticationState
+    public partial class AuthState
     {
         public class RefeshUserDataHandler : ActionHandler<RefreshUserDataAction>
         {
@@ -31,7 +31,7 @@ namespace DexQuiz.Client.Features.Authentication
                 _logger = logger;
             }
 
-            AuthenticationState State => Store.GetState<AuthenticationState>();
+            AuthState State => Store.GetState<AuthState>();
 
             public override async Task<Unit> Handle(RefreshUserDataAction action, CancellationToken cancellationToken)
             {

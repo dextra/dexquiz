@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace DexQuiz.Client.Features.Authentication
 {
-    public partial class AuthenticationState
+    public partial class AuthState
     {
         public class SignUpHandler : ActionHandler<SignUpAction>
         {
@@ -24,21 +24,23 @@ namespace DexQuiz.Client.Features.Authentication
             private readonly AuthenticationStateProvider _authenticationStateProvider;
             private readonly NavigationManager _navigationManager;
             private readonly IToastService _toastService;
-            private readonly ILogger _logger;
+            private readonly ILogger<SignUpHandler> _logger;
 
             public SignUpHandler(IStore store,
                                 HttpClient httpClient,
                                 AuthenticationStateProvider authenticationStateProvider,
                                 NavigationManager navigationManager,
-                                IToastService toastService) : base(store)
+                                IToastService toastService,
+                                ILogger<SignUpHandler> logger) : base(store)
             {
                 _httpClient = httpClient;
                 _authenticationStateProvider = authenticationStateProvider;
                 _navigationManager = navigationManager;
                 _toastService = toastService;
+                _logger = logger;
             }
 
-            AuthenticationState State => Store.GetState<AuthenticationState>();
+            AuthState State => Store.GetState<AuthState>();
 
             public override async Task<Unit> Handle(SignUpAction action, CancellationToken cancellationToken)
             {

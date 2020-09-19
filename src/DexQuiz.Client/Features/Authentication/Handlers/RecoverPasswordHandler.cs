@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DexQuiz.Client.Features.Authentication
 {
-    public partial class AuthenticationState
+    public partial class AuthState
     {
         public class RecoverPasswordHandler : ActionHandler<RecoverPasswordAction>
         {

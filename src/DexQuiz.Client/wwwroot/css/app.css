@@ -1,183 +1,559 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+* {
+    box-sizing: border-box;
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Raleway', sans-serif;
+    background: url('/images/dexquiz-bg-devcamp.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover
 }
 
-a, .btn-link {
-    color: #0366d6;
+.form-control {
+    height: inherit;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    .form-control:focus {
+        outline: unset;
+        box-shadow: none;
+    }
+
+    .form-control:disabled,
+    .form-control[readonly] {
+        background: none;
+        color: #636363;
+    }
+
+.blazored-toast-body .blazored-toast-header h5 {
+    font-size: 15px;
 }
 
-app {
+.blazored-toast-body p {
+    font-size: 12px;
+}
+
+button .button-loading-spinner {
+    height: 100%;
+}
+
+div.bg-image {
+    background: url('/images/dexquiz-bg-devcamp.png');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+div.login label:not(.checkscript) {
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    color: #FF1A5D;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+div.login input:not([type=checkbox]),
+div.login input:focus:not([type=checkbox]) {
+    border: 2px solid #FF1A5D;
+    border-radius: 5px;
+    background: none;
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #E3E3E3;
+    height: 36px;
+}
+
+div.login input::placeholder {
+    color: #636363;
+}
+
+div.login .input-group-text {
+    border: none;
+    background: #FF1A5D;
+    color: #000000;
+}
+
+div.login a {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #FFFFFF;
+}
+
+    div.login a#forgot-password {
+        text-decoration-line: underline;
+    }
+
+    div.login a#sign-up {
+        text-transform: uppercase;
+    }
+
+div.login button {
+    height: 38px;
+    color: #430C44;
+    text-transform: uppercase;
+}
+
+div.login .validation-message {
+    color: orange;
+    font-size: 12px;
+    margin-top: -10px;
+}
+
+.checkscript {
+    display: block;
     position: relative;
-    display: flex;
-    flex-direction: column;
+    padding-left: 45px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 24px;
+    color: #E3E3E3;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
 }
 
-.top-row {
-    height: 3.5rem;
+/* Hide the default checkbox */
+input[type=checkbox] {
+    visibility: hidden;
+}
+
+/* creating a custom checkbox based 
+            on demand */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: transparent;
+    border: 2px solid #B2B2B2;
+    border-radius: 3px;
+}
+
+/* specify the background color to be 
+        shown when hovering over checkbox */
+.checkscript:hover input ~ .checkmark {
+    background-color: transparent;
+    border: 2px solid #FF1A5D;
+}
+
+/* specify the background color to be 
+        shown when checkbox is active */
+.checkscript input:active ~ .checkmark {
+    background-color: transparent;
+    border: 2px solid #B2B2B2;
+}
+
+/* specify the background color to be 
+        shown when checkbox is checked */
+.checkscript input:checked ~ .checkmark {
+    background-color: transparent;
+    border: 2px solid #B2B2B2;
+}
+
+/* checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* display checkmark when checked */
+.checkscript input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* styling the checkmark using webkit */
+/* creating a square to be the sign of 
+            checkmark */
+.checkscript .checkmark:after {
+    left: 8px;
+    bottom: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.carousel-indicators li {
+    height: 12px;
+    width: 12px;
+    border: 2px solid #FF1A5D;
+    border-radius: 50%;
+    background-color: transparent;
+    opacity: 1;
+}
+
+.carousel-indicators .active {
+    background-color: #FF1A5D;
+    opacity: 1;
+}
+
+.carousel-inner {
+    box-shadow: 0px 4px 10px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+.card {
+    border: none;
+}
+
+.nav-link {
+    color: #fff !important;
+    border-radius: 0 !important;
+}
+
+    .nav-link:not(.active) {
+        border-top: 5px solid transparent;
+    }
+
+    .nav-link svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .nav-link.active {
+        background-color: transparent !important;
+        border-top: solid 5px #FF1A5D;
+    }
+
+.app-title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.menu-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.dashboard .card-body {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+    .dashboard .card-body h4 {
+        color: #B8B8B8;
+        font-size: 24px;
+    }
+
+.dashboard-progress h5 {
+    font-size: 24px;
+}
+
+.dashboard span.badge {
+    font-size: 1rem;
+    margin-top: .10rem;
+    padding: 5px 10px;
+    background-color: #000000;
+}
+
+.dashboard a.btn.btn-primary,
+.pretrack a.btn.btn-primary {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+}
+
+.dashboard a.btn.btn-primary:hover,
+.pretrack a.btn.btn-primary:hover {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+    color: #000;
+}
+
+.dashboard a.btn.btn-outline-primary {
+    background-color: transparent !important;
+    border-color: #000000 !important;
+    color: #000000 !important;
+}
+
+    .dashboard a.btn.btn-outline-primary:hover {
+        background-color: #FF1A5D !important;
+        border-color: #FF1A5D !important;
+        color: #fff !important;
+    }
+
+.carousel-control-next:focus,
+.carousel-control-next:hover,
+.carousel-control-prev:focus,
+.carousel-control-prev:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.ranking .card-body {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+    .ranking .card-body h4 {
+        color: #B8B8B8;
+        font-size: 24px;
+    }
+
+.ranking-progress h5 {
+    font-size: 24px;
+}
+
+.ranking span.badge {
+    font-size: 1rem;
+    margin-top: .10rem;
+    padding: 5px 10px;
+    background-color: #000000;
+}
+
+.awards .card-body {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .awards .card-body h4 {
+        color: #B8B8B8;
+        font-size: 24px;
+    }
+
+.awards-progress h5 {
+    font-size: 24px;
+}
+
+.pretrack-text {
+    font-size: 16px;
+    text-align: center;
+}
+
+.pretrack .btn-primary {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+    color: #fff;
+}
+
+.pretrack .btn-primary:hover {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+    color: #000;
+}
+
+.track-result .btn-secondary {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+    color: #000;
+}
+
+.track-result .btn-secondary:hover {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+    color: #fff;
+}
+
+.track-title h5 {
+    font-size: 24px;
+}
+
+.track-timer div {
+    font-size: 16px;
+    background-color: #000000;
+    color: #FFF;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.progress {
+    border-radius: 20px;
+    background-color: #C4C4C4;
+    height: 20px;
+}
+
+    .progress .progress-bar {
+        padding: 6px 3px;
+        border-radius: 20px;
+        background-color: #FF1A5D;
+        color: #fff;
+    }
+
+.question-balloon:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 3px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid #fff;
+    bottom: -18px;
+    left: 10%;
+}
+
+.question-balloon p {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 18px;
     display: flex;
     align-items: center;
+    color: #5D6063;
 }
 
-.main {
-    flex: 1;
+.btn-next-question,
+.btn-next-question:focus,
+.btn-next-question:active {
+    background-color: #FF1A5D !important;
+    border-color: #FF1A5D !important;
+    border: 1px solid #FF1A5D !important;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #fff;
 }
 
-    .main .top-row {
-        background-color: #f7f7f7;
-        border-bottom: 1px solid #d6d5d5;
-        justify-content: flex-end;
+    .btn-next-question:hover {
+        background-color: #FF1A5D !important;
+        border-color: #FF1A5D !important;
+        border: 1px solid #FF1A5D !important;
+        box-sizing: border-box;
+        border-radius: 5px;
+        color: #000;
     }
 
-        .main .top-row > a, .main .top-row .btn-link {
-            white-space: nowrap;
-            margin-left: 1.5rem;
-        }
-
-.main .top-row a:first-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
+.track-options .inputGroup {
+    background-color: #fff;
+    display: block;
+    margin: 10px 0;
+    position: relative;
 }
 
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-}
-
-    .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
-    }
-
-    .sidebar .navbar-brand {
-        font-size: 1.1rem;
-    }
-
-    .sidebar .oi {
-        width: 2rem;
-        font-size: 1.1rem;
-        vertical-align: text-top;
-        top: -2px;
-    }
-
-    .sidebar .nav-item {
-        font-size: 0.9rem;
-        padding-bottom: 0.5rem;
-    }
-
-        .sidebar .nav-item:first-of-type {
-            padding-top: 1rem;
-        }
-
-        .sidebar .nav-item:last-of-type {
-            padding-bottom: 1rem;
-        }
-
-        .sidebar .nav-item a {
-            color: #d7d7d7;
-            border-radius: 4px;
-            height: 3rem;
-            display: flex;
-            align-items: center;
-            line-height: 3rem;
-        }
-
-            .sidebar .nav-item a.active {
-                background-color: rgba(255,255,255,0.25);
-                color: white;
-            }
-
-            .sidebar .nav-item a:hover {
-                background-color: rgba(255,255,255,0.1);
-                color: white;
-            }
-
-.content {
-    padding-top: 1.1rem;
-}
-
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid red;
-}
-
-.validation-message {
-    color: red;
-}
-
-#blazor-error-ui {
-    background: lightyellow;
-    bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-    display: none;
-    left: 0;
-    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-}
-
-#blazor-error-ui .dismiss {
-    cursor: pointer;
-    position: absolute;
-    right: 0.75rem;
-    top: 0.5rem;
-}
-
-@media (max-width: 767.98px) {
-    .main .top-row:not(.auth) {
-        display: none;
-    }
-
-    .main .top-row.auth {
-        justify-content: space-between;
-    }
-
-    .main .top-row a, .main .top-row .btn-link {
-        margin-left: 0;
-    }
-}
-
-@media (min-width: 768px) {
-    app {
-        flex-direction: row;
-    }
-
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
-    }
-
-    .main .top-row {
-        position: sticky;
-        top: 0;
-    }
-
-    .main > div {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
-    }
-
-    .navbar-toggler {
-        display: none;
-    }
-
-    .sidebar .collapse {
-        /* Never collapse the sidebar for wide screens */
+    .track-options .inputGroup label {
+        padding: 12px 30px;
+        width: 100%;
         display: block;
+        text-align: left;
+        color: #3C454C;
+        cursor: pointer;
+        position: relative;
+        z-index: 2;
+        -webkit-transition: color 200ms ease-in;
+        transition: color 200ms ease-in;
+        overflow: hidden;
+        border-radius: 6px;
+        margin-left: -25px;
+        width: calc(100% + 50px);
+        padding-right: 65px;
     }
+
+        .track-options .inputGroup label:before {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            content: '';
+            background-color: #FF1A5D;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%) scale3d(1, 1, 1);
+            transform: translate(-50%, -50%) scale3d(1, 1, 1);
+            -webkit-transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .track-options .inputGroup label:after {
+            width: 32px;
+            height: 32px;
+            content: '';
+            border: 2px solid #D1D7DC;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%440A47' fill-rule='nonzero'/%3E%3C/svg%3E ");
+            background-repeat: no-repeat;
+            background-position: 2px 3px;
+            border-radius: 50%;
+            z-index: 2;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            cursor: pointer;
+            -webkit-transition: all 200ms ease-in;
+            transition: all 200ms ease-in;
+            display: none;
+        }
+
+    .track-options .inputGroup input:checked ~ label {
+        color: #FFF;
+    }
+
+        .track-options .inputGroup input:checked ~ label:before {
+            -webkit-transform: translate(-50%, -50%) scale3d(56, 56, 1);
+            transform: translate(-50%, -50%) scale3d(56, 56, 1);
+            opacity: 1;
+        }
+
+        .track-options .inputGroup input:checked ~ label:after {
+            background-color: #FFF;
+            border-color: #FFF;
+            display: block;
+        }
+
+    .track-options .inputGroup input {
+        width: 32px;
+        height: 32px;
+        -webkit-box-ordinal-group: 2;
+        order: 1;
+        z-index: 2;
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        cursor: pointer;
+        visibility: hidden;
+    }
+
+.nav-item .nav-link {
+    color: #000 !important;
+    border-radius: 0 !important;
 }
+
+    .nav-item .nav-link:not(.active) {
+        border-top: 5px solid transparent;
+    }
+
+    .nav-item .nav-link svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .nav-item .nav-link.active {
+        background-color: transparent !important;
+        border-top: solid 5px #FF1A5D;
+    }
+
+        .nav-item .nav-link.active svg {
+            color: #FF1A5D;
+        }

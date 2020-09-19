@@ -10,7 +10,7 @@ namespace DexQuiz.Client.Features.Dashboard
     {
         public class LoadTrackAction : IAction
         {
-            private int TrackId { get; private set; }
+            public int TrackId { get; private set; }
 
             public LoadTrackAction(int trackId)
             {

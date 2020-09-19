@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace DexQuiz.Client.Features.Authentication
 {
-    public partial class AuthenticationState
+    public partial class AuthState
     {
         public class LoginHandler : ActionHandler<LoginAction>
         {
@@ -25,14 +25,14 @@ namespace DexQuiz.Client.Features.Authentication
             private readonly AuthenticationStateProvider _authenticationStateProvider;
             private readonly NavigationManager _navigationManager;
             private readonly IToastService _toastService;
-            private readonly ILogger _logger;
+            private readonly ILogger<LoginHandler> _logger;
 
             public LoginHandler(IStore store,
                                 HttpClient httpClient,
                                 AuthenticationStateProvider authenticationStateProvider,
                                 NavigationManager navigationManager,
                                 IToastService toastService,
-                                ILogger logger) : base(store)
+                                ILogger<LoginHandler> logger) : base(store)
             {
                 _httpClient = httpClient;
                 _authenticationStateProvider = authenticationStateProvider;
@@ -41,7 +41,7 @@ namespace DexQuiz.Client.Features.Authentication
                 _logger = logger;
             }
 
-            AuthenticationState State => Store.GetState<AuthenticationState>();
+            AuthState State => Store.GetState<AuthState>();
 
             public override async Task<Unit> Handle(LoginAction action, CancellationToken cancellationToken)
             {
@@ -52,6 +52,11 @@ namespace DexQuiz.Client.Features.Authentication
                     State.User = await GetUserData(cancellationToken);
                     State.Succeed();
                     _navigationManager.NavigateTo("dashboard");
+                }
+                catch (UnauthorizedAccessException uae)
+                {
+                    State.Fail(uae.Message);
+                    _toastService.ShowError(uae.Message, "Login");
                 }
                 catch (Exception ex)
                 {
