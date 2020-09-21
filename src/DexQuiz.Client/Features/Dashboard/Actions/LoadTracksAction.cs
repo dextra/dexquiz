@@ -10,6 +10,14 @@ namespace DexQuiz.Client.Features.Dashboard
     {
         public class LoadTracksAction : IAction
         {
+            public LoadTracksAction(int topRanking, DateTime date)
+            {
+                TopRanking = topRanking;
+                Date = date;
+            }
+
+            public int TopRanking { get; private set; }
+            public DateTime Date { get; private set; }
         }
     }
 }

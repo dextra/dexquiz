@@ -5,6 +5,7 @@
 
 @attribute [Authorize]
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JsRuntime
 
 @inherits BlazorStateComponent
@@ -24,122 +25,124 @@
         </div>
     </div>
     <div class="row align-items-center" style="height: 100px">
-        <div class="col-12 my-auto text-center dashboard-progress">
-            <h5 class="mt-4">Você fez @State.Tracks.Count(t => State.Rankings.Any(r => r.IsCompleted() && r.TrackId == t.Id)) de @State.Tracks.Count() trilhas de conhecimento</h5>
-        </div>
+        @if (!State.IsLoading)
+        {
+            <div class="col-12 my-auto text-center dashboard-progress">
+                <h5 class="mt-4">Você fez @State.Tracks.Count(t => t.Rankings != null && t.Rankings.Any(r => r.CompletedTime != null && r.UserId == UserId)) de @State.Tracks.Count() trilhas de conhecimento hoje</h5>
+            </div>
+        }
     </div>
     <div class="row align-items-center" style="height: calc(100% - 215px);">
         <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2" style="height: 85% !important;">
-            <div class="dashboard h-100">
-                <div id="carouselExampleIndicators"
-                     class="carousel slide h-100" data-ride="carousel" style="margin-top: -30px;">
-                    <ol class="carousel-indicators" style="bottom: -60px;">
-                        @for (int i = 0; i < State.Tracks.Count(); i++)
-                        {
-                            <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
-                        }
-                    </ol>
-                    <div class="carousel-inner h-100">
-                        @for (int i = 0; i < State.Tracks.Count(); i++)
-                        {
-                            var track = State.Tracks.ElementAt(i);
-                            var rankingUrl = $"/ranking/{track.Id}";
-                            var trackUrl = $"/pre-track/{track.Id}";
-                            <div class="carousel-item h-100 @(i == 0 ? "active" : "")">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex flex-column">
-                                        <div class="my-auto text-center mb-5">
-                                            @if (!string.IsNullOrWhiteSpace(track.ImageUrl))
-                                            {
+            @if (State.IsLoading)
+            {
+                <div class="dashboard h-100 text-center" style="padding-top: 35%;">
+                    <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="158px" height="24px" viewBox="0 0 158 24" xml:space="preserve"><path fill="#e3e3e3" d="M64 4h10v10H64V4zm20 0h10v10H84V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zM4 4h10v10H4V4zm20 0h10v10H24V4zm20 0h10v10H44V4z" /><path fill="#bdbdbd" d="M144 14V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10H84zm9-9h-8v8h8V5zm-29 9V4h10v10H64zm9-9h-8v8h8V5zm-29 9V4h10v10H44zm9-9h-8v8h8V5zm-29 9V4h10v10H24zm9-9h-8v8h8V5zM4 14V4h10v10H4zm9-9H5v8h8V5z" /><g><path fill="#d9d9d9" d="M-58 16V2h14v14h-14zm13-13h-12v12h12V3z" /><path fill="#9c9c9c" fill-opacity="0.3" d="M-40 0h18v18h-18z" /><path fill="#b2b2b2" d="M-40 18V0h18v18h-18zm17-17h-16v16h16V1z" /><path fill="#9c9c9c" fill-opacity="0.7" d="M-20 0h18v18h-18z" /><path fill="#4c4c4c" d="M-20 18V0h18v18h-18zM-3 1h-16v16h16V1z" /><animateTransform attributeName="transform" type="translate" values="20 0;40 0;60 0;80 0;100 0;120 0;140 0;160 0;180 0;200 0" calcMode="discrete" dur="1800ms" repeatCount="indefinite" /></g></svg>
+                </div>
+            }
+            else
+            {
+                <div class="dashboard h-100">
+                    <div id="carouselExampleIndicators"
+                         class="carousel slide h-100" data-ride="carousel" style="margin-top: -30px;">
+                        <ol class="carousel-indicators" style="bottom: -60px;">
+                            @for (int i = 0; i < State.Tracks.Count(); i++)
+                            {
+                                <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                            }
+                        </ol>
+                        <div class="carousel-inner h-100">
+                            @for (int i = 0; i < State.Tracks.Count(); i++)
+                            {
+                                var track = State.Tracks.ElementAt(i);
+                                var rankingUrl = $"/ranking/{track.Id}";
+                                var trackUrl = $"/pre-track/{track.Id}";
+                                <div class="carousel-item h-100 @(i == 0 ? "active" : "")">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="my-auto text-center mb-5">
+                                                @if (!string.IsNullOrWhiteSpace(track.ImageUrl))
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-12 mb-5">
+                                                            <img src="@track.ImageUrl" style="max-height: 110px;" />
+                                                        </div>
+                                                    </div>
+                                                }
                                                 <div class="row">
                                                     <div class="col-12 mb-5">
-                                                        <img src="@track.ImageUrl" style="max-height: 110px;" />
+                                                        <h4>@track.Name</h4>
                                                     </div>
                                                 </div>
-                                            }
-                                            <div class="row">
-                                                <div class="col-12 mb-5">
-                                                    <h4>@track.Name</h4>
-                                                </div>
-                                            </div>
-                                            @if (track.Loading)
-                                            {
-                                                <div class="row">
-                                                    <div class="col-12 mb-2">
-                                                        <div>
-                                                            <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="158px" height="24px" viewBox="0 0 158 24" xml:space="preserve"><path fill="#e3e3e3" d="M64 4h10v10H64V4zm20 0h10v10H84V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zM4 4h10v10H4V4zm20 0h10v10H24V4zm20 0h10v10H44V4z" /><path fill="#bdbdbd" d="M144 14V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10H84zm9-9h-8v8h8V5zm-29 9V4h10v10H64zm9-9h-8v8h8V5zm-29 9V4h10v10H44zm9-9h-8v8h8V5zm-29 9V4h10v10H24zm9-9h-8v8h8V5zM4 14V4h10v10H4zm9-9H5v8h8V5z" /><g><path fill="#d9d9d9" d="M-58 16V2h14v14h-14zm13-13h-12v12h12V3z" /><path fill="#9c9c9c" fill-opacity="0.3" d="M-40 0h18v18h-18z" /><path fill="#b2b2b2" d="M-40 18V0h18v18h-18zm17-17h-16v16h16V1z" /><path fill="#9c9c9c" fill-opacity="0.7" d="M-20 0h18v18h-18z" /><path fill="#4c4c4c" d="M-20 18V0h18v18h-18zM-3 1h-16v16h16V1z" /><animateTransform attributeName="transform" type="translate" values="20 0;40 0;60 0;80 0;100 0;120 0;140 0;160 0;180 0;200 0" calcMode="discrete" dur="1800ms" repeatCount="indefinite" /></g></svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else if (!State.Rankings.Any(r => r.TrackId == track.Id))
-                                            {
-                                                <div class="row">
-                                                    <div class="col-12 mb-2">
-                                                        <div>
-                                                            <h5 class="d-inline text-center"><small>Seja o primeiro a fazer o desafio desta trilha!</small></h5>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                foreach (var ranking in State.Rankings.Where(r => r.TrackId == track.Id).OrderByDescending(r => r.Points).ThenBy(r => r.CompletedTime))
+                                                @if (track.Rankings == null || !track.Rankings.Any())
                                                 {
                                                     <div class="row">
                                                         <div class="col-12 mb-2">
                                                             <div>
-                                                                <h5 class="d-inline float-left"><strong>@ranking.Position)</strong> @FormatName(ranking.Username)</h5>
-                                                                <span class="badge badge-secondary float-right">@ranking.Points</span>
+                                                                <h5 class="d-inline text-center"><small>Seja o primeiro a fazer o desafio desta trilha!</small></h5>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 }
-                                            }
-                                        </div>
-                                        <div class="row mt-5">
-                                            <div class="col-12">
-                                                @if (State.Rankings.Any(r => r.TrackId == track.Id && r.UserId == UserId && r.IsCompleted()))
-                                                {
-                                                    <NavLink class="btn btn-outline-primary w-100" href="@rankingUrl">
-                                                        VER RANKING COMPLETO
-                                                    </NavLink>
-                                                }
                                                 else
                                                 {
-                                                    <NavLink class="btn btn-primary w-100" href="@trackUrl">
-                                                        COMEÇAR DESAFIO
-                                                    </NavLink>
+                                                    foreach (var ranking in track.Rankings.OrderByDescending(r => r.Points).ThenBy(r => r.CompletedTimeSpan()))
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-12 mb-2">
+                                                                <div>
+                                                                    <h5 class="d-inline float-left"><strong>@ranking.Position)</strong> @FormatName(ranking.Username)</h5>
+                                                                    <span class="badge badge-secondary float-right">@ranking.Points</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                 }
+                                            </div>
+                                            <div class="row mt-5">
+                                                <div class="col-12">
+                                                    @if (track.Rankings != null && track.Rankings.Any(r => r.UserId == UserId && r.CompletedTime != null))
+                                                    {
+                                                        <NavLink class="btn btn-outline-primary w-100" href="@rankingUrl">
+                                                            VER RANKING COMPLETO
+                                                        </NavLink>
+                                                    }
+                                                    else
+                                                    {
+                                                        <NavLink class="btn btn-primary w-100" href="@trackUrl">
+                                                            COMEÇAR DESAFIO
+                                                        </NavLink>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                        <a id="carouselExampleIndicators-prev"
-                           class="carousel-control-prev" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: brightness(0.3);"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a id="carouselExampleIndicators-next"
-                           class="carousel-control-next" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true" style="filter: brightness(0.3);"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+                            }
+                            <a id="carouselExampleIndicators-prev"
+                               class="carousel-control-prev" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: brightness(0.3);"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a id="carouselExampleIndicators-next"
+                               class="carousel-control-next" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: brightness(0.3);"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
             <div class="row fixed-bottom" style="height: 50px; background: #fff;">
                 <div class="col-12">
                     <ul class="nav nav-pills nav-fill">
-                        @*<li class="nav-item">
-                                <NavLink class="nav-link" href="/ranking" Match="NavLinkMatch.All">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-                                    </svg>
-                                </NavLink>
-                            </li>*@
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/ranking" Match="NavLinkMatch.All">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                </svg>
+                            </NavLink>
+                        </li>
                         <li class="nav-item">
                             <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -172,11 +175,7 @@
         if (firstRender)
         {
             State.Initialize();
-            await Mediator.Send(new DashboardState.LoadDashboardAction());
-            foreach (var track in State.Tracks)
-            {
-                await Mediator.Send(new DashboardState.LoadDashboardRankingAction(track.Id, 5));
-            }
+            await Mediator.Send(new DashboardState.LoadTracksAction(3, DateTime.Today));
             await JsRuntime.InvokeAsync<object>("initializeCarousel");
             UserId = await GetUserId();
             StateHasChanged();

@@ -12,18 +12,14 @@ namespace DexQuiz.Client.Features.Dashboard
         public bool IsLoading { get; private set; }
         public string Message { get; private set; }
         public bool HasError { get; private set; }
-        public TrackModel[] Tracks { get; set; }
-        public TrackModel CurrentTrack { get; private set; }
-        public TrackRakingModel[] CurrentTrackRakings { get; private set; }
+        public TrackWithRankingsModel[] Tracks { get; private set; }
 
         public override void Initialize()
         {
-            IsLoading = false;
+            IsLoading = true;
             HasError = false;
             Message = null;
-            Tracks = new TrackModel[0];
-            CurrentTrack = null;
-            CurrentTrackRakings = new TrackRakingModel[0];
+            Tracks = new TrackWithRankingsModel[0];
         }
 
         private void StartLoading()

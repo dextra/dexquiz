@@ -10,6 +10,6 @@ namespace DexQuiz.Server.Models
         public bool Available { get; set; }
 
         public IEnumerable<AwardModel> Awards { get; set; }
-        public IEnumerable<TrackRankingModel> Ranking { get; set; }
+        public IEnumerable<TrackRankingModel> Rankings { get; set; }
     }
 }

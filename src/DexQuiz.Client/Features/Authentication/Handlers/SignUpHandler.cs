@@ -1,5 +1,6 @@
 ﻿using Blazored.Toast.Services;
 using BlazorState;
+using DexQuiz.Client.Converters;
 using DexQuiz.Client.Models;
 using DexQuiz.Client.Providers;
 using MediatR;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -79,7 +81,9 @@ namespace DexQuiz.Client.Features.Authentication
 
             private async Task<UserModel> GetUserData(CancellationToken cancellationToken = default)
             {
-                return await _httpClient.GetFromJsonAsync<UserModel>("User", cancellationToken);
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new DoubleToStringConverter());
+                return await _httpClient.GetFromJsonAsync<UserModel>("User", options, cancellationToken);
             }
         }
     }
