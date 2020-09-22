@@ -38,4 +38,4 @@ jobs:
       with:
         publish-profile: ${{ secrets.BWASM_PUB_PROFILE_WIN }}
         app-name: ${{ env.AZURE_APP_NAME }}
-        package: dexquiz
+        package: /home/runner/work/dexquiz/dexquiz/src/DexQuiz.Server/dexquiz/
