@@ -15,7 +15,7 @@ defaults:
 
 jobs:
   build:
-    name: Build
+    name: Build & Deploy
     runs-on: ubuntu-latest
     steps:
 
@@ -32,26 +32,10 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish --configuration Release -o published_app --no-build
-
-    - name: Publish artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: webapp
-        path: published_app/
-  
-  deploy:
-    needs: build
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: webapp
+      run: dotnet publish --configuration Release -o ${{env.DOTNET_ROOT}}/dexquiz --no-build
 
     - uses: azure/webapps-deploy@v2
       with:
         publish-profile: ${{ secrets.BWASM_PUB_PROFILE_WIN }}
         app-name: ${{ env.AZURE_APP_NAME }}
+        package: ${{env.DOTNET_ROOT}}/dexquiz
