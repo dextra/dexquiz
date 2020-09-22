@@ -73,5 +73,32 @@ namespace DexQuiz.Server.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete("RequestRemoval", Name = "RemoveAccountRequest")]
+        public async Task<IActionResult> DeleteAsync()
+        {
+            try
+            {
+                int userId = (int)this.GetLoggedUserId();
+
+                if (userId > 0)
+                {
+                    var result = await _userService.RemoveAccount(userId);
+
+                    if (result.Result)
+                        return NoContent();
+                    else
+                        return BadRequest(result);
+                }
+                else
+                {
+                    return BadRequest("Usuário inexistente ou sessão expirada");
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

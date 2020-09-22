@@ -8,6 +8,7 @@ namespace DexQuiz.Core.Entities
 
         public TrackWithRanking(Track track, IEnumerable<TrackRanking> ranking)
         {
+            Id = track.Id;
             Name = track.Name;
             ImageUrl = track.ImageUrl;
             Available = track.Available;

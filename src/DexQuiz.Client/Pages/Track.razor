@@ -1,0 +1,154 @@
+﻿@page "/track/{TrackId:int}"
+
+@using DexQuiz.Client.Features.Track
+
+@inject Blazored.LocalStorage.ILocalStorageService Storage;
+@inject IJSRuntime JsRuntime
+
+@attribute [Authorize]
+
+@inherits BlazorStateComponent
+
+<div class="container-fluid h-100" style="background: #E5E5E5; padding-bottom: 25px;">
+    <Toolbar ShowBackButton="true" />
+    <div class="row align-items-center">
+        <div class="col-12 my-auto text-center track-title">
+            <h5 class="mt-4">@State?.Track?.Name</h5>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 my-auto text-center track-timer">
+            <div>@Timer.ToString(@"hh\:mm\:ss")</div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <div class="progress mt-3">
+                <div class="progress-bar" role="progressbar" style="width: @((decimal.Parse(State.RemainingQuestions.ToString()) + 1m) / decimal.Parse(State.TotalQuestions.ToString()) * 100)%;"
+                     aria-valuenow="@(State.TotalQuestions - State.RemainingQuestions + 1)" aria-valuemin="0" aria-valuemax="@State.TotalQuestions">
+                    @(State.RemainingQuestions + 1)/@State.TotalQuestions
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-baseline mt-5 mb-4">
+        <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <div class="track h-100">
+                <div class="card h-100 question-balloon">
+                    <div class="card-body d-flex flex-column">
+                        @if (State.IsLoading)
+                        {
+                            <p class="text-center">
+                                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="158px" height="24px" viewBox="0 0 158 24" xml:space="preserve"><path fill="#e3e3e3" d="M64 4h10v10H64V4zm20 0h10v10H84V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zM4 4h10v10H4V4zm20 0h10v10H24V4zm20 0h10v10H44V4z" /><path fill="#bdbdbd" d="M144 14V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10H84zm9-9h-8v8h8V5zm-29 9V4h10v10H64zm9-9h-8v8h8V5zm-29 9V4h10v10H44zm9-9h-8v8h8V5zm-29 9V4h10v10H24zm9-9h-8v8h8V5zM4 14V4h10v10H4zm9-9H5v8h8V5z" /><g><path fill="#d9d9d9" d="M-58 16V2h14v14h-14zm13-13h-12v12h12V3z" /><path fill="#9c9c9c" fill-opacity="0.3" d="M-40 0h18v18h-18z" /><path fill="#b2b2b2" d="M-40 18V0h18v18h-18zm17-17h-16v16h16V1z" /><path fill="#9c9c9c" fill-opacity="0.7" d="M-20 0h18v18h-18z" /><path fill="#4c4c4c" d="M-20 18V0h18v18h-18zM-3 1h-16v16h16V1z" /><animateTransform attributeName="transform" type="translate" values="20 0;40 0;60 0;80 0;100 0;120 0;140 0;160 0;180 0;200 0" calcMode="discrete" dur="1800ms" repeatCount="indefinite" /></g></svg>
+                            </p>
+                        }
+                        else
+                        {
+                            <p><strong>@(State.RemainingQuestions + 1)</strong>. @State?.Question?.Text</p>
+                            @if (!string.IsNullOrWhiteSpace(State?.Question?.ImageUrl))
+                            {
+                                <img style="max-height: 250px; object-fit: contain;" src="@State.Question.ImageUrl" />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-baseline mt-4 mb-2">
+        <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <div class="track h-100">
+                <div class="card h-100 question-answers">
+                    <div class="card-body d-flex flex-column">
+                        <div class="track-options">
+                            @for (int i = 0; i < GetAnswerCount(); i++)
+                            {
+                                var answer = State.Question.Answers.ElementAt(i);
+                                <div class="inputGroup" style="@(i < (GetAnswerCount() - 1) ? "border-bottom: 1px solid gainsboro;" : "")">
+                                    <input type="radio" name="response" id="@answer.Id" value="@answer.Id" @onchange="RadioSelection" />
+                                    <label for="@answer.Id"><strong>@(i + 1))</strong> @(answer.Text != null ? answer.Text.Replace("\\n", "<br/>") : "")</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row align-items-baseline mt-5">
+        <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            @if (!State.IsLoading)
+            { 
+                <button class="btn btn-primary btn-next-question w-100" type="button" @onclick="@HandleAnswer">
+                    <text>AVANÇAR</text>
+                </button>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int TrackId { get; set; }
+
+    TrackState State => GetState<TrackState>();
+
+    private string RadioValue = "";
+
+    TimeSpan Timer = new TimeSpan(0, 0, 0);
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var startTime = await Storage.GetItemAsync<DateTime?>($"{TrackId}_Start_{DateTime.Today:yyyy_MM_dd}");
+
+        if (startTime.HasValue)
+        {
+            Timer = DateTime.Now.Subtract(startTime.Value);
+        }
+        else
+        {
+            await Storage.SetItemAsync<DateTime?>($"{TrackId}_Start_{DateTime.Today:yyyy_MM_dd}", DateTime.Now);
+        }
+
+        await Mediator.Send(new TrackState.GetNextQuestionAction(TrackId));
+        await JsRuntime.InvokeVoidAsync("clearQuestionOptions");
+        StateHasChanged();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        Task.Run(QuestionTimer);
+        return base.OnInitializedAsync();
+    }
+
+    void RadioSelection(ChangeEventArgs args)
+    {
+        RadioValue = args.Value.ToString();
+    }
+
+    private async Task HandleAnswer()
+    {
+        if (!string.IsNullOrWhiteSpace(RadioValue) && int.TryParse(RadioValue, out var a))
+        {
+            var answer = new QuestionAnswerModel(State.Question.Id, int.Parse(RadioValue), TrackId);
+            State.InitializeWithProgress();
+            await Mediator.Send(new TrackState.AnswerQuestionAction(TrackId, answer));
+            await JsRuntime.InvokeVoidAsync("clearQuestionOptions");
+        }
+    }
+
+    private async Task QuestionTimer()
+    {
+        while (true)
+        {
+            await Task.Delay(1000);
+            Timer = Timer.Add(new TimeSpan(0, 0, 1));
+            StateHasChanged();
+        }
+    }
+
+    private int GetAnswerCount()
+    {
+        return (State?.Question?.Answers?.Count()) ?? 0;
+    }
+}
