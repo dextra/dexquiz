@@ -17,8 +17,8 @@ namespace DexQuiz.Core.Interfaces.Services
         Task InitializeQuestionsForUserIfNotCreatedAsync(int userId, int trackId);
         Task<Question> PickQuestionForUserAsync(int userId, int trackId);
         Task<int> PickProgressForUserAsync(int userId, int trackId);
-        Task<bool> HasQuestionBeenAnsweredByUserAsync(int userId, int questionId);
-        Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId);
+        Task<bool> HasQuestionBeenAnsweredByUserAsync(int userId, int questionId, int trackId);
+        Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId, int trackId);
         Task<ProcessResult> SaveAnsweredQuestionAsync(AnsweredQuestion answeredQuestion);
         Task<bool> HasUserFinishedTrackAsync(int userId, int trackId);
         Task<bool> HasUserFinishedTrackAsync(AnsweredQuestion answeredQuestion);

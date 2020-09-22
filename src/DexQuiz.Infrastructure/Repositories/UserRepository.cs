@@ -20,5 +20,13 @@ namespace DexQuiz.Infrastructure.Repositories
         {
             return await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
         }
+
+        public async Task RemoveAccountData(int userId)
+        {
+            _context.TrackRankings.RemoveRange(_context.TrackRankings.Where(tr => tr.UserId == userId));
+            _context.AnsweredQuestions.RemoveRange(_context.AnsweredQuestions.Where(aq => aq.UserId == userId));
+            _context.AvailableQuestions.RemoveRange(_context.AvailableQuestions.Where(aq => aq.UserId == userId));
+            _context.Users.Remove(await _context.Users.FindAsync(userId));
+        }
     }
 }

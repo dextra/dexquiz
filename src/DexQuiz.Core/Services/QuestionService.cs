@@ -75,9 +75,9 @@ namespace DexQuiz.Core.Services
             return new ProcessResult { Message = "Pergunta deletada com sucesso", Result = true };
         }
 
-        public async Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId)
+        public async Task<bool> DoesAnswerBelongToQuestionAsync(int answerId, int questionId, int trackId)
         {
-            return (await _answerRepository.FindAsync(x => x.Id == answerId && x.QuestionId == questionId)) != null;
+            return (await _answerRepository.FindAsync(x => x.Id == answerId && x.QuestionId == questionId && x.Question.TrackId == trackId)).Any() ;
         }
 
         public async Task<Question> FindQuestionByIdAsync(int id) =>
@@ -86,9 +86,9 @@ namespace DexQuiz.Core.Services
         public async Task<IEnumerable<Question>> GetTrackQuestionsAsync(int trackId) =>
             await _questionRepository.FindAsync(q => q.TrackId == trackId);
 
-        public async Task<bool> HasQuestionBeenAnsweredByUserAsync(int userId, int questionId) =>
+        public async Task<bool> HasQuestionBeenAnsweredByUserAsync(int userId, int questionId, int trackId) =>
             (await _answeredQuestionRepository
-                .FindAsync(aq => aq.UserId == userId && aq.QuestionId == questionId)).Any();
+                .FindAsync(aq => aq.UserId == userId && aq.QuestionId == questionId && aq.TrackId == trackId)).Any();
 
         public async Task<bool> HasUserFinishedTrackAsync(int userId, int trackId) =>
             await _trackRepository.IsTrackDoneByUserAsync(userId, trackId);
@@ -136,7 +136,7 @@ namespace DexQuiz.Core.Services
             //TODO: Needs refactor to work properly with async
             return (await _availableQuestionRepository
                    .FindAsync(aq => aq.UserId == userId && aq.TrackId == trackId))
-                   .Where(aq => !HasQuestionBeenAnsweredByUserAsync(userId, aq.QuestionId).GetAwaiter().GetResult())
+                   .Where(aq => !HasQuestionBeenAnsweredByUserAsync(userId, aq.QuestionId, trackId).GetAwaiter().GetResult())
                    .Select(aq => FindQuestionByIdAsync(aq.QuestionId).GetAwaiter().GetResult())
                    .FirstOrDefault();
         }
@@ -147,11 +147,11 @@ namespace DexQuiz.Core.Services
             {
                 return new ProcessResult { Message = "O usuário já completou todas as suas questões da trilha.", Result = false };
             }
-            else if (await HasQuestionBeenAnsweredByUserAsync(answeredQuestion.UserId, answeredQuestion.QuestionId))
+            else if (await HasQuestionBeenAnsweredByUserAsync(answeredQuestion.UserId, answeredQuestion.QuestionId, answeredQuestion.TrackId))
             {
                 return new ProcessResult { Message = "O usuário já respondeu essa questão.", Result = false };
             }
-            else if (!await DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
+            else if (!await DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId, answeredQuestion.TrackId))
             {
                 return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }

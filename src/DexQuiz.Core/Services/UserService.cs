@@ -51,5 +51,20 @@ namespace DexQuiz.Core.Services
 
         private async Task<bool> IsCellPhoneAvailable(string userCellPhone) => 
             !(await _userRepository.FindAsync(x => x.CellPhone == userCellPhone)).Any();
+
+        public async Task<ProcessResult> RemoveAccount(int userId)
+        {
+            try
+            {
+                await _userRepository.RemoveAccountData(userId);
+                await _unitOfWork.CommitAsync();
+                return new ProcessResult { Result = true };
+            }
+            catch (Exception e)
+            {
+                _unitOfWork.Rollback();
+                return new ProcessResult { Message = e.Message, Result = false };
+            }
+        }
     }
 }
