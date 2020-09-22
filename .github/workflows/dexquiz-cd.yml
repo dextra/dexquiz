@@ -32,7 +32,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish
-      run: dotnet publish --configuration Release -o ../published_app --no-build
+      run: dotnet publish --configuration Release -o published_app --no-build
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v2
