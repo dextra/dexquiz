@@ -50,8 +50,8 @@
                                         </svg>
                                     </span>
                                 </div>
-                                <InputNumber id="inputPhoneNumber" @bind-Value="signUpData.CellPhone" class="form-control" placeholder="11988887777" aria-label="Celular" aria-describedby="celular"
-                                             disabled="@State.IsLoading" />
+                                <InputText id="inputPhoneNumber" @bind-Value="signUpData.CellPhone" class="form-control" placeholder="11988887777" aria-label="Celular" aria-describedby="celular"
+                                             disabled="@State.IsLoading" onkeyup="this.value=this.value.replace(/[^\d]/,'')" />
                             </div>
                             <ValidationMessage For="@(() => signUpData.CellPhone)" />
                         </div>

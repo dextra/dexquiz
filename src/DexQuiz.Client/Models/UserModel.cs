@@ -22,7 +22,8 @@ namespace DexQuiz.Client.Models
         public string Password { get; set; }
 
         [Required(ErrorMessage = "O telefone é obrigatório")]
-        public double? CellPhone { get; set; }
+        [MaxLength(13, ErrorMessage = "O telefone deve possuir até 13 caracteres")]
+        public string CellPhone { get; set; }
 
         [StringLength(100, ErrorMessage = "Perfil do Linkedin deve ter até 100 caracteres")]
         public string Linkedin { get; set; }

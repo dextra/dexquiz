@@ -16,7 +16,7 @@ namespace DexQuiz.Server.Models.Validations
 
             RuleFor(x => x.CellPhone)
              .NotEmpty().WithMessage("O campo Celular é obrigatório")
-             .Length(10, 11);
+             .Length(10, 13);
 
             RuleFor(x => x.Email)
              .NotEmpty().WithMessage("O campo Email é obrigatório")
