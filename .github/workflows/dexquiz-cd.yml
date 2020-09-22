@@ -1,0 +1,49 @@
+name: DexQuiz CD
+
+on:
+  release:
+    types:
+        - created
+
+env:
+  AZURE_RESOURCE_GROUP: DevCampProducao
+  AZURE_APP_NAME: dexquiz
+  PUBLISH_PATH: './dexquiz'
+  NETCORE_VERSION: '3.1.101'
+
+defaults:
+  run:
+    working-directory: src/DexQuiz.Server
+
+jobs:
+  build:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core ${{ env.NETCORE_VERSION }}
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.NETCORE_VERSION }}
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish --configuration Release -o ${{ env.PUBLISH_PATH }} --no-build
+
+    - uses: azure/webapps-deploy@v2
+      with:
+        publish-profile: ${{ secrets.BWASM_PUB_PROFILE_WIN }}
+        app-name: ${{ env.AZURE_APP_NAME }}
+        package: ${{ env.PUBLISH_PATH }}
+
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: webapp
+        path: ${{ env.PUBLISH_PATH }}
