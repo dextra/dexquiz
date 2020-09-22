@@ -27,7 +27,7 @@
             }
             else
             {
-                <div class="dashboard h-100">
+                <div class="dashboard">
                     <div id="carouselExampleIndicators"
                          class="carousel slide h-100" data-ride="carousel" style="margin-top: -30px;">
                         <ol class="carousel-indicators" style="bottom: -60px;">
@@ -49,13 +49,13 @@
                                                 @if (!string.IsNullOrWhiteSpace(track.ImageUrl))
                                                 {
                                                     <div class="row">
-                                                        <div class="col-12 mb-5">
-                                                            <img src="@track.ImageUrl" style="max-height: 110px;" />
+                                                        <div class="col-12">
+                                                            <img src="@track.ImageUrl" style="max-height: 64px;" />
                                                         </div>
                                                     </div>
                                                 }
                                                 <div class="row">
-                                                    <div class="col-12 mb-5">
+                                                    <div class="col-12 mb-1">
                                                         <h4>@track.Name</h4>
                                                     </div>
                                                 </div>
@@ -76,7 +76,7 @@
                                                         <div class="row">
                                                             <div class="col-12 mb-2">
                                                                 <div>
-                                                                    <h5 class="d-inline float-left"><strong>@award.Position)</strong> @award.Description</h5>
+                                                                    <h5 class="d-inline float-left text-justify" style="font-size: 16px;"><strong>@award.Position)</strong> @award.Description</h5>
                                                                 </div>
                                                             </div>
                                                         </div>

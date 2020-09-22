@@ -52,13 +52,13 @@
                                                 @if (!string.IsNullOrWhiteSpace(track.ImageUrl))
                                                 {
                                                     <div class="row">
-                                                        <div class="col-12 mb-5">
-                                                            <img src="@track.ImageUrl" style="max-height: 110px;" />
+                                                        <div class="col-12">
+                                                            <img src="@track.ImageUrl" style="max-height: 64px;" />
                                                         </div>
                                                     </div>
                                                 }
                                                 <div class="row">
-                                                    <div class="col-12 mb-5">
+                                                    <div class="col-12 mb-1">
                                                         <h4>@track.Name</h4>
                                                     </div>
                                                 </div>
@@ -92,7 +92,7 @@
                                                     @if (track.Rankings != null && track.Rankings.Any(r => r.UserId == UserId && r.CompletedTime != null))
                                                     {
                                                         <NavLink class="btn btn-outline-primary w-100" href="@rankingUrl">
-                                                            VER RANKING COMPLETO
+                                                            RANKING COMPLETO
                                                         </NavLink>
                                                     }
                                                     else

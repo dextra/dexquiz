@@ -134,8 +134,23 @@
                 <div class="row mt-1 mt-md-2">
                     <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center">
                         <button type="button" id="back-login" class="nav-link link-button d-inline" @onclick="ShowLegalTerms">
+                            Termos de uso
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center">
+                        <button type="button" id="back-login" class="nav-link link-button d-inline" @onclick="ShowPrivacyPolicy">
                             Pol&iacute;tica de privacidade
                         </button>
+                    </div>
+                </div>
+                <div class="row mb-3 mb-sm-4 mb-md-5 mt-3">
+                    <div class="col-6 col-sm-4 offset-sm-2 col-md-2 offset-md-4 text-center">
+                        <img src="/images/logo-dextra-negativo-branco-new.png" />
+                    </div>
+                    <div class="col-6 col-sm-4 col-md-2 text-center">
+                        <img src="/images/logo-mutant-negativo-branco-new.png" />
                     </div>
                 </div>
                 <div class="row mt-2 mt-md-3">
@@ -173,6 +188,7 @@
 </div>
 
 <LegalTerms Open="@legalTermsOpen" OnClose="@CloseLegalTerms" />
+<PrivacyPolicy Open="@privacyPolicyOpen" OnClose="@ClosePrivacyPolicy" />
 
 @code {
     private bool showPassword = false;
@@ -180,6 +196,7 @@
     private UserModel signUpData = new UserModel();
 
     private bool legalTermsOpen;
+    private bool privacyPolicyOpen;
 
     AuthState State => GetState<AuthState>();
 
@@ -197,9 +214,16 @@
     {
         legalTermsOpen = true;
     }
-
+    private void ShowPrivacyPolicy()
+    {
+        privacyPolicyOpen = true;
+    }
     private void CloseLegalTerms(MouseEventArgs e)
     {
         legalTermsOpen = false;
+    }
+    private void ClosePrivacyPolicy(MouseEventArgs e)
+    {
+        privacyPolicyOpen = false;
     }
 }

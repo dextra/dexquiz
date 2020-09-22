@@ -114,6 +114,11 @@ namespace DexQuiz.Client.Features.Track
                 {
                     return await response.Content.ReadFromJsonAsync<QuestionModel>();
                 }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    _navigationManager.NavigateTo($"/track-result/{trackId}");
+                    return null;
+                }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized
                     || response.StatusCode == HttpStatusCode.Forbidden)
                 {
