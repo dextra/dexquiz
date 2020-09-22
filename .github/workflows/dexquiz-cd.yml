@@ -41,10 +41,10 @@ jobs:
       with:
         app-name: ${{ env.AZURE_APP_NAME }}
         publish-profile: ${{ secrets.BWASM_PUB_PROFILE_WIN }}
-        package: ${{ env.PUBLISH_PATH }}/
+        package: /home/runner/dexquiz/publish/
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
         name: webapp
-        path: ${{ env.PUBLISH_PATH }}
+        path: /home/runner/dexquiz/publish/
