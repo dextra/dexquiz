@@ -9,5 +9,6 @@ namespace DexQuiz.Server.Models
     {
         public int QuestionId { get; set; }
         public int AnswerId { get; set; }
+        public int TrackId { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace DexQuiz.Core.Interfaces.Services
     {
         Task<ProcessResult> AddUser(User user);
         Task<User> FindUserById(int id);
+        Task<ProcessResult> RemoveAccount(int userId);
     }
 }

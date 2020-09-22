@@ -88,11 +88,9 @@ namespace DexQuiz.Client.Features.Authentication
                 }
             }
 
-            private async Task<UserModel> GetUserData(CancellationToken cancellationToken = default)
+            private async Task<ProfileModel> GetUserData(CancellationToken cancellationToken = default)
             {
-                var options = new JsonSerializerOptions();
-                options.Converters.Add(new DoubleToStringConverter());
-                return await _httpClient.GetFromJsonAsync<UserModel>("User", options, cancellationToken);
+                return await _httpClient.GetFromJsonAsync<ProfileModel>("User", cancellationToken);
             }
         }
     }

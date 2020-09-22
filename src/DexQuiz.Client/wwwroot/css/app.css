@@ -103,6 +103,18 @@ div.login button {
     text-transform: uppercase;
 }
 
+div.login button.btn.btn-outline-light {
+    height: 38px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+    div.login button.btn.btn-outline-light:hover {
+        height: 38px;
+        color: #430C44;
+        text-transform: uppercase;
+    }
+
 div.login .validation-message {
     color: orange;
     font-size: 12px;
@@ -416,7 +428,6 @@ input[type=checkbox] {
     font-size: 16px;
     line-height: 18px;
     display: flex;
-    align-items: center;
     color: #5D6063;
 }
 
@@ -557,3 +568,73 @@ input[type=checkbox] {
         .nav-item .nav-link.active svg {
             color: #FF1A5D;
         }
+
+.menu-toggle {
+    background: #430C44;
+    width: 100%;
+    top: 65px;
+    z-index: 9999;
+    position: absolute;
+}
+
+    .menu-toggle .nav-item .nav-link {
+        color: #fff !important;
+        border-top: none;
+        background: none;
+        border: none;
+        font-size: 14px;
+        font-weight: 400;
+        margin: 5px 10px 5px auto;
+    }
+
+        .menu-toggle .nav-item .nav-link span {
+            margin-right: 10px;
+        }
+
+.modal-dialog {
+    position: absolute;
+    top: 25px !important;
+    display: flex;
+    z-index: 99999;
+    border: solid 2px #430C44;
+    border-radius: 5px;
+    background: #fff;
+    left: 20px;
+    right: 20px;
+    bottom: 35px;
+    max-width: 90%;
+}
+
+    .modal-dialog .btn-close-modal {
+        background: #430C44;
+        color: #fff;
+    }
+
+.nav-link.link-button {
+    color: #fff !important;
+    border-top: none;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+div.login input:not([type=checkbox]), div.login input:focus:not([type=checkbox]) {
+    border-radius: 0;
+}
+
+.terms h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.terms h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.terms p,
+.terms li,
+.terms td {
+    font-size: 14px;
+}

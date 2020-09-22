@@ -11,19 +11,7 @@
 @inherits BlazorStateComponent
 
 <div class="container-fluid vh-100" style="background: #E5E5E5;">
-    <div class="row" style="height: 65px; background: #000;">
-        <div class="col-2 col-md-3 offset-md-1 col-lg-3 offset-lg-1 my-auto app-title">
-            DexQuiz
-        </div>
-        <div class="col-8 col-md-4 col-lg-4 my-auto text-center">
-            <img src="/images/logo-dextra-new.png" style="max-height: 35px;" />
-        </div>
-        <div class="col-2 col-md-3 offset-md-1 col-lg-3 offset-lg-1 my-auto menu-icon" style="color: #A994B3;">
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-list" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M2.5 11.5A.5.5 0 0 1 3 11h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 3 3h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-            </svg>
-        </div>
-    </div>
+    <Toolbar ShowBackButton="false" />
     <div class="row align-items-center" style="height: 100px">
         @if (!State.IsLoading)
         {
@@ -79,14 +67,14 @@
                                                     <div class="row">
                                                         <div class="col-12 mb-2">
                                                             <div>
-                                                                <h5 class="d-inline text-center"><small>Seja o primeiro a fazer o desafio desta trilha!</small></h5>
+                                                                <h5 class="d-inline text-center"><small>Seja o primeiro a fazer o desafio desta trilha hoje!</small></h5>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 }
                                                 else
                                                 {
-                                                    foreach (var ranking in track.Rankings.OrderByDescending(r => r.Points).ThenBy(r => r.CompletedTimeSpan()))
+                                                    foreach (var ranking in track.Rankings.OrderByDescending(r => r.Points).ThenBy(r => r.CompletedTimeSpan()).Take(3))
                                                     {
                                                         <div class="row">
                                                             <div class="col-12 mb-2">
@@ -137,13 +125,6 @@
                 <div class="col-12">
                     <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
-                            <NavLink class="nav-link" href="/ranking" Match="NavLinkMatch.All">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-                                </svg>
-                            </NavLink>
-                        </li>
-                        <li class="nav-item">
                             <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
@@ -168,14 +149,14 @@
 @code {
     DashboardState State => GetState<DashboardState>();
 
-    int UserId = 0;
+    private int UserId = 0;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             State.Initialize();
-            await Mediator.Send(new DashboardState.LoadTracksAction(3, DateTime.Today));
+            await Mediator.Send(new DashboardState.LoadTracksAction(10, DateTime.Today));
             await JsRuntime.InvokeAsync<object>("initializeCarousel");
             UserId = await GetUserId();
             StateHasChanged();

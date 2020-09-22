@@ -17,18 +17,18 @@ namespace DexQuiz.Client.Features.Track
 {
     public partial class TrackState
     {
-        public class GetNextQuestionHandler : ActionHandler<GetNextQuestionAction>
+        public class GetTrackResultHandler : ActionHandler<GetTrackResultAction>
         {
             private readonly HttpClient _httpClient;
             private readonly NavigationManager _navigationManager;
             private readonly IToastService _toastService;
-            private readonly ILogger<GetNextQuestionHandler> _logger;
+            private readonly ILogger<GetTrackResultHandler> _logger;
 
-            public GetNextQuestionHandler(IStore store,
+            public GetTrackResultHandler(IStore store,
                 HttpClient httpClient,
                 NavigationManager navigationManager,
                 IToastService toastService,
-                ILogger<GetNextQuestionHandler> logger) : base(store)
+                ILogger<GetTrackResultHandler> logger) : base(store)
             {
                 _httpClient = httpClient;
                 _navigationManager = navigationManager;
@@ -38,21 +38,12 @@ namespace DexQuiz.Client.Features.Track
 
             TrackState State => Store.GetState<TrackState>();
 
-            public override async Task<Unit> Handle(GetNextQuestionAction action, CancellationToken cancellationToken)
+            public override async Task<Unit> Handle(GetTrackResultAction action, CancellationToken cancellationToken)
             {
                 try
                 {
                     State.StartLoading();
-                    State.RemainingQuestions = await GetRemainingQuestions(action.TrackId, cancellationToken);
-
-                    if (State.RemainingQuestions == State.TotalQuestions)
-                    {
-                        State.Succeed();
-                        _navigationManager.NavigateTo($"/track-result/{action.TrackId}");
-                        return await Unit.Task;
-                    }
-
-                    State.Question = await GetNextQuestion(action.TrackId, cancellationToken);
+                    State.TrackResult = await GetTrackResult(action.TrackId, cancellationToken);
                     State.Succeed();
                 }
                 catch (UnauthorizedAccessException uae)
@@ -66,17 +57,17 @@ namespace DexQuiz.Client.Features.Track
                     State.Fail(ex.Message);
                     _toastService.ShowError(ex.Message, "Login");
                 }
-
                 return await Unit.Task;
             }
 
-            private async Task<int> GetRemainingQuestions(int trackId, CancellationToken cancellationToken)
+            private async Task<TrackRankingModel> GetTrackResult(int trackId, CancellationToken cancellationToken)
             {
-                var response = await _httpClient.GetAsync($"questions/track/{trackId}/progress");
+                var response = await _httpClient.GetAsync($"ranking/track/{trackId}?top=1&date={DateTime.Today:yyyy-MM-dd}");
+
                 if (response.IsSuccessStatusCode)
                 {
-                    var progress = await response.Content.ReadFromJsonAsync<TrackProgressModel>();
-                    return State.TotalQuestions - progress.QuestionNumber;
+                    var rankings = await response.Content.ReadFromJsonAsync<TrackRankingModel[]>();
+                    return rankings.FirstOrDefault();
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized
                     || response.StatusCode == HttpStatusCode.Forbidden)
@@ -86,24 +77,7 @@ namespace DexQuiz.Client.Features.Track
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
-                }
-            }
-            private async Task<QuestionModel> GetNextQuestion(int trackId, CancellationToken cancellationToken)
-            {
-                var response = await _httpClient.GetAsync($"questions/track/{trackId}", cancellationToken);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadFromJsonAsync<QuestionModel>();
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized
-                    || response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    throw new UnauthorizedAccessException(response.ReasonPhrase);
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
+                }                
             }
         }
     }

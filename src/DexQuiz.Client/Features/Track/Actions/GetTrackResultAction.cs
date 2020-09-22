@@ -8,11 +8,11 @@ namespace DexQuiz.Client.Features.Track
 {
     public partial class TrackState
     {
-        public class GetNextQuestionAction : IAction
+        public class GetTrackResultAction : IAction
         {
-            public int TrackId { get; private set; }
+            public int TrackId { get; set; }
 
-            public GetNextQuestionAction(int trackId)
+            public GetTrackResultAction(int trackId)
             {
                 TrackId = trackId;
             }

@@ -11,8 +11,8 @@
             <EditForm Model="@loginData" OnValidSubmit="HandleLogin">
                 <DataAnnotationsValidator />
                 <div class="row">
-                    <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center">
-                        <img src="/images/logo-devcamp.png" style="max-width: 273px;" />
+                    <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center mt-4">
+                        <img src="/images/logo-devcamp.png" style="max-width: 273px; width: 80%" />
                     </div>
                 </div>
                 <div class="row mt-2 mt-md-5">
@@ -89,10 +89,10 @@
                         </NavLink>
                     </div>
                 </div>
-                <div class="row mt-2 mt-md-5 mb-5">
+                <div class="row mt-2 mt-md-5 mb-3 mb-md-5">
                     <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
                         <button class="btn btn-light w-100" type="submit">
-                            @if (State.IsLoading) 
+                            @if (State.IsLoading)
                             {
                                 <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="158px" height="24px" viewBox="0 0 158 24" xml:space="preserve"><path fill="#e3e3e3" d="M64 4h10v10H64V4zm20 0h10v10H84V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zm20 0h10v10h-10V4zM4 4h10v10H4V4zm20 0h10v10H24V4zm20 0h10v10H44V4z" /><path fill="#bdbdbd" d="M144 14V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10h-10zm9-9h-8v8h8V5zm-29 9V4h10v10H84zm9-9h-8v8h8V5zm-29 9V4h10v10H64zm9-9h-8v8h8V5zm-29 9V4h10v10H44zm9-9h-8v8h8V5zm-29 9V4h10v10H24zm9-9h-8v8h8V5zM4 14V4h10v10H4zm9-9H5v8h8V5z" /><g><path fill="#d9d9d9" d="M-58 16V2h14v14h-14zm13-13h-12v12h12V3z" /><path fill="#9c9c9c" fill-opacity="0.3" d="M-40 0h18v18h-18z" /><path fill="#b2b2b2" d="M-40 18V0h18v18h-18zm17-17h-16v16h16V1z" /><path fill="#9c9c9c" fill-opacity="0.7" d="M-20 0h18v18h-18z" /><path fill="#4c4c4c" d="M-20 18V0h18v18h-18zM-3 1h-16v16h16V1z" /><animateTransform attributeName="transform" type="translate" values="20 0;40 0;60 0;80 0;100 0;120 0;140 0;160 0;180 0;200 0" calcMode="discrete" dur="1800ms" repeatCount="indefinite" /></g></svg>
                             }
@@ -103,7 +103,21 @@
                         </button>
                     </div>
                 </div>
-                <div class="row fixed-bottom mb-3 mb-sm-4 mb-md-5 mt-3">
+                <div class="row mt-1 mt-md-2">
+                    <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center">
+                        <button type="button" id="back-login" class="nav-link link-button d-inline" @onclick="ShowLegalTerms">
+                            Termos de uso
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-10 offset-1 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 text-center">
+                        <button type="button" id="back-login" class="nav-link link-button d-inline" @onclick="ShowPrivacyPolicy">
+                            Pol&iacute;tica de privacidade
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-3 mb-sm-4 mb-md-5 mt-3">
                     <div class="col-6 col-sm-4 offset-sm-2 col-md-2 offset-md-4 text-center">
                         <img src="/images/logo-dextra-negativo-branco-new.png" />
                     </div>
@@ -116,10 +130,17 @@
     </div>
 </div>
 
+<LegalTerms Open="@legalTermsOpen" OnClose="@CloseLegalTerms" />
+<PrivacyPolicy Open="@privacyPolicyOpen" OnClose="@ClosePrivacyPolicy" />
+
 @code {
     private bool showPassword = false;
 
     private LoginModel loginData = new LoginModel();
+
+    private bool legalTermsOpen;
+
+    private bool privacyPolicyOpen;
 
     AuthState State => GetState<AuthState>();
 
@@ -131,5 +152,25 @@
     private void HandleLogin()
     {
         Mediator.Send(new AuthState.LoginAction(loginData));
+    }
+
+    private void ShowLegalTerms()
+    {
+        legalTermsOpen = true;
+    }
+
+    private void ShowPrivacyPolicy()
+    {
+        privacyPolicyOpen = true;
+    }
+
+    private void CloseLegalTerms(MouseEventArgs e)
+    {
+        legalTermsOpen = false;
+    }
+
+    private void ClosePrivacyPolicy(MouseEventArgs e)
+    {
+        privacyPolicyOpen = false;
     }
 }

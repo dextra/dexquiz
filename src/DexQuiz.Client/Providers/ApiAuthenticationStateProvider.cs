@@ -46,15 +46,20 @@ namespace DexQuiz.Client.Providers
             NotifyAuthenticationStateChanged(authState);
         }
 
-        public void MarkUserAsLoggedOut()
+        public async Task MarkUserAsLoggedOut()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
             var authState = Task.FromResult(new AuthenticationState(anonymousUser));
+            await _localStorage.ClearAsync();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", string.Empty);
             NotifyAuthenticationStateChanged(authState);
         }
 
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
+            if (string.IsNullOrWhiteSpace(jwt))
+                return new List<Claim>();
+
             var claims = new List<Claim>();
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);

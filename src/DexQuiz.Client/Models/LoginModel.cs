@@ -8,6 +8,16 @@ namespace DexQuiz.Client.Models
 {
     public class LoginModel
     {
+        public LoginModel()
+        { 
+        }
+
+        public LoginModel(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
+
         [Required(ErrorMessage = "Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Informe um email válido")]
         public string Email { get; set; }

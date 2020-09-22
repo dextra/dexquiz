@@ -52,7 +52,7 @@ namespace DexQuiz.Client.Features.Authentication
                     await SignUp(action.Data, cancellationToken);
                     State.User = await GetUserData(cancellationToken);
                     State.Succeed();
-                    _navigationManager.NavigateTo("dashboard");
+                    _navigationManager.NavigateTo("/");
 
                 }
                 catch (Exception ex)
@@ -67,11 +67,11 @@ namespace DexQuiz.Client.Features.Authentication
 
             private async Task SignUp(UserModel userData, CancellationToken cancellationToken = default)
             {
+                userData.UserType = Models.Enums.UserType.Default;
                 var response = await _httpClient.PostAsJsonAsync<UserModel>("User", userData, cancellationToken);
                 if (response.IsSuccessStatusCode)
                 {
-                    var content = await response.Content.ReadFromJsonAsync<AuthenticationTokenModel>(cancellationToken: cancellationToken);
-                    await ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(userData.Email, content.Token);
+                    await Login(new LoginModel(userData.Email, userData.Password));
                 }
                 else
                 {
@@ -79,11 +79,27 @@ namespace DexQuiz.Client.Features.Authentication
                 }
             }
 
-            private async Task<UserModel> GetUserData(CancellationToken cancellationToken = default)
+            private async Task<ProfileModel> GetUserData(CancellationToken cancellationToken = default)
             {
-                var options = new JsonSerializerOptions();
-                options.Converters.Add(new DoubleToStringConverter());
-                return await _httpClient.GetFromJsonAsync<UserModel>("User", options, cancellationToken);
+                return await _httpClient.GetFromJsonAsync<ProfileModel>("User", cancellationToken);
+            }
+
+            private async Task Login(LoginModel loginData, CancellationToken cancellationToken = default)
+            {
+                var response = await _httpClient.PostAsJsonAsync<LoginModel>("Authentication", loginData, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadFromJsonAsync<AuthenticationTokenModel>(cancellationToken: cancellationToken);
+                    await ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginData.Email, content.Token);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedAccessException(response.ReasonPhrase);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
             }
         }
     }

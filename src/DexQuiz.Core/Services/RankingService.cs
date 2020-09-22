@@ -132,7 +132,7 @@ namespace DexQuiz.Core.Services
             var question = await _questionRepository.FindAsync(answeredQuestion.QuestionId);
             var answer = await _answerRepository.FindAsync(answeredQuestion.AnswerId);
 
-            if (!await _questionService.DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId))
+            if (!await _questionService.DoesAnswerBelongToQuestionAsync(answeredQuestion.AnswerId, answeredQuestion.QuestionId, answeredQuestion.TrackId))
             {
                 return new ProcessResult { Message = "A resposta não é uma das respostas possíveis para a questão.", Result = false };
             }
@@ -144,6 +144,7 @@ namespace DexQuiz.Core.Services
                 var trackRanking = (await _trackRankingRepository
                                           .FindAsync(tr => tr.TrackId == question.TrackId && tr.UserId == answeredQuestion.UserId))
                                           .FirstOrDefault();
+
                 if (answer.IsAnswerCorrect)
                 {
                     trackRanking.Points += (int)question.QuestionLevel;
@@ -152,14 +153,12 @@ namespace DexQuiz.Core.Services
                 {
                     trackRanking.CompletedTime = DateTime.UtcNow - trackRanking.StartedAtUtc;
                 }
+
                 _trackRankingRepository.Update(trackRanking);
                 await _unitOfWork.CommitAsync();
-                return new ProcessResult { Result = true };
             }
-            else
-            {
-                return new ProcessResult { Result = false };
-            }
+            
+            return new ProcessResult { Result = true };
         }
 
         private async Task<IEnumerable<TrackRanking>> GetOrderedTrackRankingsAsync(int trackId, DateTime? date)

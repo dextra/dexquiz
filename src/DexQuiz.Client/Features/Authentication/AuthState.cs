@@ -12,7 +12,7 @@ namespace DexQuiz.Client.Features.Authentication
         public bool IsLoading { get; private set; }
         public string Message { get; private set; }
         public bool HasError { get; private set; }
-        public UserModel User { get; private set; }
+        public ProfileModel User { get; private set; }
 
         public override void Initialize()
         {
