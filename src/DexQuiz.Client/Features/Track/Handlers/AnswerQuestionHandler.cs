@@ -72,7 +72,11 @@ namespace DexQuiz.Client.Features.Track
             private async Task PostQuestionAnswer(QuestionAnswerModel answer, CancellationToken cancellationToken)
             {
                 var response = await _httpClient.PostAsJsonAsync<QuestionAnswerModel>($"questions/answer", answer, cancellationToken);
-                if (response.StatusCode == HttpStatusCode.Unauthorized
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized
                     || response.StatusCode == HttpStatusCode.Forbidden)
                 {
                     throw new UnauthorizedAccessException(response.ReasonPhrase);
