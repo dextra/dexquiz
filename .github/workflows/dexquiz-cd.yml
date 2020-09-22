@@ -37,11 +37,11 @@ jobs:
       run: dotnet publish --configuration Release -o ${{ env.PUBLISH_PATH }} --no-build
 
     - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v1
+      uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_APP_NAME }}
         publish-profile: ${{ secrets.BWASM_PUB_PROFILE_WIN }}
-        package: ${{ env.PUBLISH_PATH }}
+        package: ${{ env.PUBLISH_PATH }}/
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v1.0.0
