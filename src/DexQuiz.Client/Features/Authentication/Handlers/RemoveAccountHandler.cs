@@ -42,13 +42,13 @@ namespace DexQuiz.Client.Features.Authentication
                 catch (UnauthorizedAccessException uae)
                 {
                     State.Fail(uae.Message);
-                    _toastService.ShowError(uae.Message, "Login");
+                    _toastService.ShowError(uae.Message, "Remover Conta");
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
                     State.Fail(ex.Message);
-                    _toastService.ShowError(ex.Message, "Login");
+                    _toastService.ShowError(ex.Message, "Remover Conta");
                 }
                 return await Unit.Task;
             }

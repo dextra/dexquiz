@@ -18,7 +18,7 @@ namespace DexQuiz.Client.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Senha é obrigatória")]
-        [MinLength(6, ErrorMessage = "Informe uma senha com ao menos 6 dígitos")]
+        [MinLength(7, ErrorMessage = "Informe uma senha com ao menos 7 dígitos")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "O telefone é obrigatório")]

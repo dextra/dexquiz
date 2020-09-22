@@ -59,7 +59,7 @@ namespace DexQuiz.Client.Features.Authentication
                 {
                     _logger.LogError(ex, ex.Message);
                     State.Fail(ex.Message);
-                    _toastService.ShowError(ex.Message, "Login");
+                    _toastService.ShowError(ex.Message, "Cadastro");
                 }
 
                 return await Unit.Task;
@@ -72,6 +72,14 @@ namespace DexQuiz.Client.Features.Authentication
                 if (response.IsSuccessStatusCode)
                 {
                     await Login(new LoginModel(userData.Email, userData.Password));
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    var content = await response.Content.ReadFromJsonAsync<ResultModel>(cancellationToken: cancellationToken);
+                    if (content != null && content.Message != null)
+                    {
+                        throw new Exception(content.Message);
+                    }
                 }
                 else
                 {
@@ -91,6 +99,14 @@ namespace DexQuiz.Client.Features.Authentication
                 {
                     var content = await response.Content.ReadFromJsonAsync<AuthenticationTokenModel>(cancellationToken: cancellationToken);
                     await ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginData.Email, content.Token);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    var content = await response.Content.ReadFromJsonAsync<ResultModel>(cancellationToken: cancellationToken);
+                    if (content != null && content.Message != null)
+                    {
+                        throw new Exception(content.Message);
+                    }
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {

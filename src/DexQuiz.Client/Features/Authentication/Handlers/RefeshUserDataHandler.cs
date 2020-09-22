@@ -57,7 +57,7 @@ namespace DexQuiz.Client.Features.Authentication
                 {
                     _logger.LogError(ex, ex.Message);
                     State.Fail(ex.Message);
-                    _toastService.ShowError(ex.Message, "Login");
+                    _toastService.ShowError(ex.Message, "Carregar Usuário");
                 }
 
                 return await Unit.Task;
