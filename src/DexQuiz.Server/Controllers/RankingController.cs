@@ -72,6 +72,16 @@ namespace DexQuiz.Server.Controllers
         [HttpGet("{trackId}")]
         public async Task<IActionResult> GetRankingByTrackId(int trackId, [FromQuery(Name = "date")] DateTime date)
         {
+            if(date == null || date == DateTime.MinValue)
+            {
+                return BadRequest($"O campo Date não é válido {date}");
+            }
+
+            if (trackId < 1)
+            {
+                return BadRequest($"O campo TrackId deve ser maior que 0");
+            }
+
             int userId = Convert.ToInt32(this.GetLoggedUserId());
             var ranking = await _rankingService.GetTrackRankingForUserAsync(trackId, userId, date);
             
