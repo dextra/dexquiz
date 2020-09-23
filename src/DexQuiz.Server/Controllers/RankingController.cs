@@ -64,6 +64,21 @@ namespace DexQuiz.Server.Controllers
         }
 
         /// <summary>
+        /// Returns a ranking for a specific user and date
+        /// </summary>
+        /// <param name="trackId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        [HttpGet("{trackId}")]
+        public async Task<IActionResult> GetRankingByTrackId(int trackId, [FromQuery(Name = "date")] DateTime date)
+        {
+            int userId = Convert.ToInt32(this.GetLoggedUserId());
+            var ranking = await _rankingService.GetTrackRankingForUserAsync(trackId, userId, date);
+            
+            return Ok(_mapper.Map<TrackRankingModel>(ranking));
+        }
+
+        /// <summary>
         /// Show all available tracks with your respective ranking.
         /// </summary>
         /// <param name="top">Number of ranking positions to be fetched</param>

@@ -208,5 +208,12 @@ namespace DexQuiz.Core.Services
                 Points = trackRanking.Points,
                 CompletedTime = trackRanking.CompletedTime
             };
+
+        public async Task<TrackRanking> GetTrackRankingForUserAsync(int trackId, int userId, DateTime date)
+        {
+            var trackRankings = await GetOrderedTrackRankingsAsync(trackId, date);
+            var trackRankingForUser = trackRankings.ToList().Where(x => x.UserId == userId && x.TrackId == trackId).FirstOrDefault();
+            return trackRankingForUser;
+        }
     }
 }

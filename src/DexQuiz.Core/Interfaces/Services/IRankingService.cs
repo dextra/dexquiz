@@ -16,5 +16,8 @@ namespace DexQuiz.Core.Interfaces.Services
         Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null, DateTime? date = null);
         Task InitializeRankingIfNotCreatedAsync(int userId, int trackId);
         Task<ProcessResult> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion);
+
+        Task<TrackRanking> GetTrackRankingForUserAsync(int trackId, int userId, DateTime date);
+
     }
 }
