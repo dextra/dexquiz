@@ -62,12 +62,11 @@ namespace DexQuiz.Client.Features.Track
 
             private async Task<TrackRankingModel> GetTrackResult(int trackId, CancellationToken cancellationToken)
             {
-                var response = await _httpClient.GetAsync($"ranking/track/{trackId}?top=1&date={DateTime.Today:yyyy-MM-dd}");
+                var response = await _httpClient.GetAsync($"ranking/{trackId}?date={DateTime.Today:yyyy-MM-dd}");
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var rankings = await response.Content.ReadFromJsonAsync<TrackRankingModel[]>();
-                    return rankings.FirstOrDefault();
+                    return await response.Content.ReadFromJsonAsync<TrackRankingModel>();
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized
                     || response.StatusCode == HttpStatusCode.Forbidden)
