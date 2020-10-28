@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DexQuiz.Infrastructure.Migrations
 {
@@ -12,7 +13,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(nullable: false),
                     QuestionId = table.Column<int>(nullable: false),
                     AnswerId = table.Column<int>(nullable: false),
@@ -28,7 +29,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TrackId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     QuestionId = table.Column<int>(nullable: false)
@@ -43,7 +44,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAtUtc = table.Column<DateTime>(nullable: false),
                     UpdatedBy = table.Column<string>(nullable: true),
@@ -63,7 +64,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TrackId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
                     Points = table.Column<int>(nullable: false),
@@ -80,7 +81,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAtUtc = table.Column<DateTime>(nullable: false),
                     UpdatedBy = table.Column<string>(nullable: true),
@@ -99,7 +100,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAtUtc = table.Column<DateTime>(nullable: false),
                     UpdatedBy = table.Column<string>(nullable: true),
@@ -122,7 +123,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAtUtc = table.Column<DateTime>(nullable: false),
                     UpdatedBy = table.Column<string>(nullable: true),
@@ -147,7 +148,7 @@ namespace DexQuiz.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAtUtc = table.Column<DateTime>(nullable: false),
                     UpdatedBy = table.Column<string>(nullable: true),
