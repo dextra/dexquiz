@@ -8,9 +8,8 @@ using DexQuiz.Infrastructure.UoW;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DexQuiz.Infrastructure
 {
@@ -21,7 +20,9 @@ namespace DexQuiz.Infrastructure
         public static void ConfigureDependencyInjectionForApi(this IServiceCollection services, IConfiguration configuration)
         {
             Configuration = configuration;
-            services.AddDbContext<DexQuizContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("dbConnection")));
+
+            services.AddDbContext<DexQuizContext>(options => options.UseLazyLoadingProxies().UseNpgsql(Configuration.GetConnectionString("NpgDbConnection")));
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAnsweredQuestionRepository, AnsweredQuestionRepository>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
@@ -59,8 +60,17 @@ namespace DexQuiz.Infrastructure
         public static void MigrateDatabase(this IServiceProvider serviceProvider)
         {
             using var serviceScope = serviceProvider.CreateScope();
-            var context = serviceScope.ServiceProvider.GetService<DexQuizContext>();
-            context.Database.Migrate();
+
+            try
+            {
+                var context = serviceScope.ServiceProvider.GetService<DexQuizContext>();
+                context.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                var logger = serviceScope.ServiceProvider.GetService<ILogger>();
+                logger.LogError(ex, "An error occurred migrating database.");
+            }
         }
     }
 }

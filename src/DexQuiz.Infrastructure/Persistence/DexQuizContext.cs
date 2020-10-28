@@ -1,11 +1,6 @@
 ﻿using DexQuiz.Core.Entities;
-using DexQuiz.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace DexQuiz.Infrastructure.Persistence
 {
