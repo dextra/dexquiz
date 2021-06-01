@@ -41,7 +41,8 @@ button .button-loading-spinner {
 }
 
 div.bg-image {
-    background: url('/images/dexquiz-bg-devcamp.png');
+    /*background: url('/images/dexquiz-bg-devcamp.png');*/
+    background-color: #000;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -52,13 +53,13 @@ div.login label:not(.checkscript) {
     font-weight: bold;
     font-size: 12px;
     line-height: 14px;
-    color: #FF1A5D;
+    color: #00ED39;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 div.login input:not([type=checkbox]),
 div.login input:focus:not([type=checkbox]) {
-    border: 2px solid #FF1A5D;
+    border: 2px solid #00ED39;
     border-radius: 5px;
     background: none;
     font-family: Raleway;
@@ -76,7 +77,7 @@ div.login input::placeholder {
 
 div.login .input-group-text {
     border: none;
-    background: #FF1A5D;
+    background: #00ED39;
     color: #000000;
 }
 
@@ -99,7 +100,7 @@ div.login a {
 
 div.login button {
     height: 38px;
-    color: #430C44;
+    color: #000;
     text-transform: uppercase;
 }
 
@@ -111,7 +112,7 @@ div.login button.btn.btn-outline-light {
 
     div.login button.btn.btn-outline-light:hover {
         height: 38px;
-        color: #430C44;
+        color: #00ED39;
         text-transform: uppercase;
     }
 
@@ -157,7 +158,7 @@ input[type=checkbox] {
         shown when hovering over checkbox */
 .checkscript:hover input ~ .checkmark {
     background-color: transparent;
-    border: 2px solid #FF1A5D;
+    border: 2px solid #00ED39;
 }
 
 /* specify the background color to be 
@@ -205,14 +206,14 @@ input[type=checkbox] {
 .carousel-indicators li {
     height: 12px;
     width: 12px;
-    border: 2px solid #FF1A5D;
+    border: 2px solid #00ED39;
     border-radius: 50%;
     background-color: transparent;
     opacity: 1;
 }
 
 .carousel-indicators .active {
-    background-color: #FF1A5D;
+    background-color: #00ED39;
     opacity: 1;
 }
 
@@ -241,7 +242,7 @@ input[type=checkbox] {
 
     .nav-link.active {
         background-color: transparent !important;
-        border-top: solid 5px #FF1A5D;
+        border-top: solid 5px #00ED39;
     }
 
 .app-title {
@@ -284,16 +285,17 @@ input[type=checkbox] {
 
 .dashboard a.btn.btn-primary,
 .pretrack a.btn.btn-primary {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
-}
-
-.dashboard a.btn.btn-primary:hover,
-.pretrack a.btn.btn-primary:hover {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
+    background-color: #00ED39 !important;
+    border-color: #00ED39 !important;
     color: #000;
 }
+
+    .dashboard a.btn.btn-primary:hover,
+    .pretrack a.btn.btn-primary:hover {
+        background-color: #00ED39 !important;
+        border-color: #00ED39 !important;
+        color: #000;
+    }
 
 .dashboard a.btn.btn-outline-primary {
     background-color: transparent !important;
@@ -302,8 +304,8 @@ input[type=checkbox] {
 }
 
     .dashboard a.btn.btn-outline-primary:hover {
-        background-color: #FF1A5D !important;
-        border-color: #FF1A5D !important;
+        background-color: #00ED39 !important;
+        border-color: #00ED39 !important;
         color: #fff !important;
     }
 
@@ -360,28 +362,28 @@ input[type=checkbox] {
 }
 
 .pretrack .btn-primary {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
-    color: #fff;
-}
-
-.pretrack .btn-primary:hover {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
+    background-color: #00ED39 !important;
+    border-color: #00ED39 !important;
     color: #000;
 }
+
+    .pretrack .btn-primary:hover {
+        background-color: #00ED39 !important;
+        border-color: #00ED39 !important;
+        color: #000;
+    }
 
 .track-result .btn-secondary {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
+    background-color: #00ED39 !important;
+    border-color: #00ED39 !important;
     color: #000;
 }
 
-.track-result .btn-secondary:hover {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
-    color: #fff;
-}
+    .track-result .btn-secondary:hover {
+        background-color: #00ED39 !important;
+        border-color: #00ED39 !important;
+        color: #000;
+    }
 
 .track-title h5 {
     font-size: 24px;
@@ -407,7 +409,7 @@ input[type=checkbox] {
     .progress .progress-bar {
         padding: 6px 3px;
         border-radius: 20px;
-        background-color: #FF1A5D;
+        background-color: #00ED39;
         color: #fff;
     }
 
@@ -434,18 +436,18 @@ input[type=checkbox] {
 .btn-next-question,
 .btn-next-question:focus,
 .btn-next-question:active {
-    background-color: #FF1A5D !important;
-    border-color: #FF1A5D !important;
-    border: 1px solid #FF1A5D !important;
+    background-color: #00ED39 !important;
+    border-color: #00ED39 !important;
+    border: 1px solid #00ED39 !important;
     box-sizing: border-box;
     border-radius: 5px;
     color: #fff;
 }
 
     .btn-next-question:hover {
-        background-color: #FF1A5D !important;
-        border-color: #FF1A5D !important;
-        border: 1px solid #FF1A5D !important;
+        background-color: #00ED39 !important;
+        border-color: #00ED39 !important;
+        border: 1px solid #00ED39 !important;
         box-sizing: border-box;
         border-radius: 5px;
         color: #000;
@@ -481,7 +483,7 @@ input[type=checkbox] {
             height: 10px;
             border-radius: 50%;
             content: '';
-            background-color: #FF1A5D;
+            background-color: #00ED39;
             position: absolute;
             width: 100%;
             top: 50%;
@@ -562,15 +564,15 @@ input[type=checkbox] {
 
     .nav-item .nav-link.active {
         background-color: transparent !important;
-        border-top: solid 5px #FF1A5D;
+        border-top: solid 5px #00ED39;
     }
 
         .nav-item .nav-link.active svg {
-            color: #FF1A5D;
+            color: #00ED39;
         }
 
 .menu-toggle {
-    background: #430C44;
+    background: #000;
     width: 100%;
     top: 65px;
     z-index: 9999;
@@ -596,7 +598,7 @@ input[type=checkbox] {
     top: 25px !important;
     display: flex;
     z-index: 99999;
-    border: solid 2px #430C44;
+    border: solid 2px #00ED39;
     border-radius: 5px;
     background: #fff;
     left: 20px;
@@ -606,8 +608,8 @@ input[type=checkbox] {
 }
 
     .modal-dialog .btn-close-modal {
-        background: #430C44;
-        color: #fff;
+        background: #00ED39;
+        color: #000;
     }
 
 .nav-link.link-button {
