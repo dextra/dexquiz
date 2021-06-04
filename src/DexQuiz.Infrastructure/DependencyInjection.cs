@@ -68,7 +68,7 @@ namespace DexQuiz.Infrastructure
             }
             catch (Exception ex)
             {
-                var logger = serviceScope.ServiceProvider.GetService<ILogger>();
+                var logger = serviceScope.ServiceProvider.GetService<ILogger<DexQuizContext>>();
                 logger.LogError(ex, "An error occurred migrating database.");
             }
         }
