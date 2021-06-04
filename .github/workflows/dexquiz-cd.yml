@@ -6,7 +6,7 @@ on:
         - created
 
 env:
-  AZURE_RESOURCE_GROUP: DevCampProducao
+  AZURE_RESOURCE_GROUP: DexQuizTDC
   AZURE_APP_NAME: dexquiz
   PUBLISH_PATH: '~/dexquiz/publish'
   NETCORE_VERSION: '5.0.300'
