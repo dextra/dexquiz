@@ -1,7 +1,7 @@
 ﻿@page "/track/{TrackId:int}"
 
 @using DexQuiz.Client.Features.Track
-@using System.Globalization 
+@using System.Globalization
 
 @inject Blazored.LocalStorage.ILocalStorageService Storage;
 @inject IJSRuntime JsRuntime
@@ -25,10 +25,13 @@
     <div class="row mt-3">
         <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             <div class="progress mt-3">
-                <div class="progress-bar" role="progressbar" style="width: @(((decimal.Parse(State.RemainingQuestions.ToString()) + 1m) / decimal.Parse(State.TotalQuestions.ToString()) * 100).ToString(CultureInfo.CreateSpecificCulture("en-US")))%;"
+                @if (!State.IsLoading && State.TotalQuestions > 0)
+                {
+                    <div class="progress-bar" role="progressbar" style="width: @(((decimal.Parse(State.RemainingQuestions.ToString()) + 1m) / decimal.Parse(State.TotalQuestions.ToString()) * 100).ToString(CultureInfo.CreateSpecificCulture("en-US")))%;"
                      aria-valuenow="@(State.TotalQuestions - State.RemainingQuestions + 1)" aria-valuemin="0" aria-valuemax="@State.TotalQuestions">
-                    @(State.RemainingQuestions + 1)/@State.TotalQuestions
-                </div>
+                        @(State.RemainingQuestions + 1)/@State.TotalQuestions
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -79,7 +82,7 @@
     <div class="row align-items-baseline mt-5">
         <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             @if (!State.IsLoading)
-            { 
+            {
                 <button class="btn btn-primary btn-next-question w-100" type="button" @onclick="@HandleAnswer">
                     <text>AVANÇAR</text>
                 </button>

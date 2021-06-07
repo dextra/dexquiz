@@ -45,7 +45,7 @@ namespace DexQuiz.Server.Controllers
         /// <param name="date">Date to filter ranking for a specific day</param>
         /// <response code="200">Returns the ranking</response>
         [HttpGet("track/{trackId}")]
-        public async Task<IActionResult> GetTrackRankings(int trackId,
+        public async Task<IActionResult> GetTrackRankings(int? trackId = null,
                                                             [FromQuery(Name = "top")] int? top = null,
                                                             [FromQuery(Name = "date")] DateTime? date = null)
         {
@@ -112,6 +112,21 @@ namespace DexQuiz.Server.Controllers
             };
 
             return Ok(_mapper.Map<IEnumerable<TrackWithRankingModel>>(trackRankings));
+        }
+
+        /// <summary>
+        /// Returns a ranking for a specific user and date
+        /// </summary>
+        /// <param name="trackId"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        [HttpGet("general")]
+        public async Task<IActionResult> GetGeneralRanking([FromQuery(Name = "top")] int top = 3)
+        {
+            int userId = Convert.ToInt32(this.GetLoggedUserId());
+            var ranking = await _rankingService.GetGeneralRankingForUserAsync(userId, top);
+
+            return Ok(ranking);
         }
     }
 }

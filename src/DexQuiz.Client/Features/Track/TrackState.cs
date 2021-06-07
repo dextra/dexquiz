@@ -24,7 +24,7 @@ namespace DexQuiz.Client.Features.Track
             HasError = false;
             Message = null;
             Track = null;
-            TotalQuestions = 12;
+            TotalQuestions = 0;
             RemainingQuestions = 0;
             Question = new QuestionModel();
             TrackResult = new TrackRankingModel();

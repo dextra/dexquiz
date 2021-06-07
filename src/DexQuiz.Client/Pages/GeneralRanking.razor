@@ -1,4 +1,4 @@
-﻿@page "/ranking/{TrackId:int}"
+﻿@page "/ranking/general"
 
 @using DexQuiz.Client.Features.Dashboard
 @using Microsoft.AspNetCore.Components.Authorization
@@ -14,7 +14,7 @@
     <Toolbar ShowBackButton="true" />
     <div class="row align-items-center" style="height: 100px">
         <div class="col-12 my-auto text-center dashboard-progress">
-            <h5 class="mt-4">Ranking @Track.Name</h5>
+            <h5 class="mt-4">Ranking Geral</h5>
         </div>
     </div>
     <div class="row align-items-center" style="height: calc(100% - 215px);">
@@ -33,19 +33,19 @@
                                     </div>
                                 </div>
                             }
-                            else if (Track.Rankings == null || !Track.Rankings.Any())
+                            else if (State.Rankings == null || !State.Rankings.Any())
                             {
                                 <div class="row">
                                     <div class="col-12 mb-2">
                                         <div>
-                                            <h5 class="d-inline text-center"><small>Seja o primeiro a fazer o desafio desta trilha!</small></h5>
+                                            <h5 class="d-inline text-center"><small>Seja o primeiro a fazer os desafios!</small></h5>
                                         </div>
                                     </div>
                                 </div>
                             }
-                            else if (Track.Rankings != null)
+                            else if (State.Rankings != null && State.Rankings.Any())
                             {
-                                foreach (var ranking in Track.Rankings.OrderByDescending(r => r.Points).ThenBy(r => r.CompletedTime))
+                                foreach (var ranking in State.Rankings.OrderByDescending(r => r.Points).ThenBy(r => r.CompletedTime))
                                 {
                                     <div class="row">
                                         <div class="col-12 mb-2">
@@ -92,16 +92,14 @@
 
     DashboardState State => GetState<DashboardState>();
 
-    TrackWithRankingsModel Track = new TrackWithRankingsModel();
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        Track = State.Tracks.FirstOrDefault(t => t.Id == TrackId);
-        if (Track == null)
-        {
-            NavManager.NavigateTo("/");
-        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Mediator.Send(new DashboardState.LoadGeneralRankingAction(10));
     }
 
     private string FormatName(string name)

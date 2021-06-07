@@ -76,6 +76,7 @@ namespace DexQuiz.Client.Features.Track
                 if (response.IsSuccessStatusCode)
                 {
                     var progress = await response.Content.ReadFromJsonAsync<TrackProgressModel>();
+                    State.TotalQuestions = progress.TotalQuestions;
                     return State.TotalQuestions - progress.QuestionNumber;
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized

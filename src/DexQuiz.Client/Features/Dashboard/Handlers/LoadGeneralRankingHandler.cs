@@ -1,5 +1,6 @@
 ﻿using Blazored.Toast.Services;
 using BlazorState;
+using DexQuiz.Client.Converters;
 using DexQuiz.Client.Models;
 using MediatR;
 using Microsoft.AspNetCore.Components;
@@ -10,25 +11,26 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace DexQuiz.Client.Features.Track
+namespace DexQuiz.Client.Features.Dashboard
 {
-    public partial class TrackState
+    public partial class DashboardState
     {
-        public class GetTrackResultHandler : ActionHandler<GetTrackResultAction>
+        public class LoadGeneralRankingHandler : ActionHandler<LoadGeneralRankingAction>
         {
             private readonly HttpClient _httpClient;
             private readonly NavigationManager _navigationManager;
             private readonly IToastService _toastService;
-            private readonly ILogger<GetTrackResultHandler> _logger;
+            private readonly ILogger<LoadGeneralRankingHandler> _logger;
 
-            public GetTrackResultHandler(IStore store,
-                HttpClient httpClient,
-                NavigationManager navigationManager,
-                IToastService toastService,
-                ILogger<GetTrackResultHandler> logger) : base(store)
+            public LoadGeneralRankingHandler(IStore store,
+                    HttpClient httpClient,
+                    NavigationManager navigationManager,
+                    IToastService toastService,
+                    ILogger<LoadGeneralRankingHandler> logger) : base(store)
             {
                 _httpClient = httpClient;
                 _navigationManager = navigationManager;
@@ -36,14 +38,14 @@ namespace DexQuiz.Client.Features.Track
                 _logger = logger;
             }
 
-            TrackState State => Store.GetState<TrackState>();
+            DashboardState State => Store.GetState<DashboardState>();
 
-            public override async Task<Unit> Handle(GetTrackResultAction action, CancellationToken cancellationToken)
+            public override async Task<Unit> Handle(LoadGeneralRankingAction action, CancellationToken cancellationToken)
             {
                 try
                 {
                     State.StartLoading();
-                    State.TrackResult = await GetTrackResult(action.TrackId, cancellationToken);
+                    State.Rankings = await GetRankings(action.TopRanking, cancellationToken);
                     State.Succeed();
                 }
                 catch (UnauthorizedAccessException uae)
@@ -55,23 +57,19 @@ namespace DexQuiz.Client.Features.Track
                 {
                     _logger.LogError(ex, ex.Message);
                     State.Fail(ex.Message);
-                    _toastService.ShowError(ex.Message, "Trilha");
+                    _toastService.ShowError(ex.Message, "Dashboard");
                 }
                 return await Unit.Task;
             }
 
-            private async Task<TrackRankingModel> GetTrackResult(int trackId, CancellationToken cancellationToken)
+            private async Task<GeneralUserRanking[]> GetRankings(int topRanking, CancellationToken cancellationToken)
             {
-                var response = await _httpClient.GetAsync($"ranking/{trackId}?date={DateTime.Today:yyyy-MM-dd}");
-
-                if (response.StatusCode == HttpStatusCode.OK)
+                var url = $"ranking/general?top={topRanking}";
+                var response = await _httpClient.GetAsync(url, cancellationToken: cancellationToken);
+                if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadFromJsonAsync<TrackRankingModel>();
-                }
-                else if (response.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return new TrackRankingModel();
-                }
+                    return await response.Content.ReadFromJsonAsync<GeneralUserRanking[]>();
+                } 
                 else if (response.StatusCode == HttpStatusCode.Unauthorized
                     || response.StatusCode == HttpStatusCode.Forbidden)
                 {
@@ -80,7 +78,7 @@ namespace DexQuiz.Client.Features.Track
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
-                }                
+                }
             }
         }
     }

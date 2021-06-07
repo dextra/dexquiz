@@ -8,5 +8,6 @@ namespace DexQuiz.Client.Models
     public class TrackProgressModel
     {
         public int QuestionNumber { get; set; }
+        public int TotalQuestions { get; set; }
     }
 }

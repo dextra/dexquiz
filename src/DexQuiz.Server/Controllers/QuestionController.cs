@@ -183,7 +183,12 @@ namespace DexQuiz.Server.Controllers
             {
                 await _questionService.InitializeQuestionsForUserIfNotCreatedAsync(userId, trackId);
                 await _rankingService.InitializeRankingIfNotCreatedAsync(userId, trackId);
-                return Ok(new CurrentQuestionForUserModel() { QuestionNumber = await _questionService.PickProgressForUserAsync(userId, trackId) });
+                return Ok(
+                    new CurrentQuestionForUserModel() 
+                    { 
+                        QuestionNumber = await _questionService.PickProgressForUserAsync(userId, trackId),
+                        TotalQuestions = await _questionService.PickTotalQuestionsForUserAsync(userId, trackId)
+                    });
             }
             catch (Exception e)
             {

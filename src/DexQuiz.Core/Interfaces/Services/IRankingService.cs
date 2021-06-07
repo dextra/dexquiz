@@ -11,13 +11,14 @@ namespace DexQuiz.Core.Interfaces.Services
         Task<IEnumerable<TrackWithRanking>> GetAllPublicTracksWithRankingsAsync(int? top = null, DateTime? date = null);
         Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForAdminAsync(int? top = null, DateTime? date = null);
         Task<IEnumerable<TrackWithRanking>> GetAllTracksWithRankingsForUserAsync(int userId, int? top = null, DateTime? date = null);
-        Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int trackId, int? top = null, DateTime? date = null);
-        Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int trackId, int? top = null, DateTime? date = null);
-        Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int trackId, int userId, int? top = null, DateTime? date = null);
+        Task<IEnumerable<TrackRanking>> GetPublicTrackRankingsAsync(int? trackId, int? top = null, DateTime? date = null);
+        Task<IEnumerable<TrackRanking>> GetTrackRankingsForAdminAsync(int? trackId, int? top = null, DateTime? date = null);
+        Task<IEnumerable<TrackRanking>> GetTrackRankingsForUserAsync(int? trackId, int userId, int? top = null, DateTime? date = null);
         Task InitializeRankingIfNotCreatedAsync(int userId, int trackId);
         Task<ProcessResult> UpdateRankingAfterUserAnswerAsync(AnsweredQuestion answeredQuestion);
 
         Task<TrackRanking> GetTrackRankingForUserAsync(int trackId, int userId, DateTime date);
+        Task<IEnumerable<GeneralRanking>> GetGeneralRankingForUserAsync(int userId, int top);
 
     }
 }

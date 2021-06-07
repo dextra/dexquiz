@@ -62,9 +62,9 @@ namespace DexQuiz.Client.Features.Dashboard
                 return await Unit.Task;
             }
 
-            private async Task<TrackWithRankingsModel[]> GetTracks(DateTime date, int topRanking, CancellationToken cancellationToken)
+            private async Task<TrackWithRankingsModel[]> GetTracks(DateTime? date, int topRanking, CancellationToken cancellationToken)
             {
-                var url = $"ranking/trackwithranking?top={topRanking}&date={date:yyyy-MM-dd}";
+                var url = $"ranking/trackwithranking?top={topRanking}" + (date.HasValue ? $"&date={date:yyyy-MM-dd}" : "");
                 var response = await _httpClient.GetAsync(url, cancellationToken: cancellationToken);
                 if (response.IsSuccessStatusCode)
                 {

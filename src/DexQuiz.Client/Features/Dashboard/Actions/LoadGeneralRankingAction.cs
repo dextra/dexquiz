@@ -8,16 +8,14 @@ namespace DexQuiz.Client.Features.Dashboard
 {
     public partial class DashboardState
     {
-        public class LoadTracksAction : IAction
+        public class LoadGeneralRankingAction : IAction
         {
-            public LoadTracksAction(int topRanking, DateTime? date)
+            public LoadGeneralRankingAction(int topRanking)
             {
                 TopRanking = topRanking;
-                Date = date;
             }
 
             public int TopRanking { get; private set; }
-            public DateTime? Date { get; private set; }
         }
     }
 }

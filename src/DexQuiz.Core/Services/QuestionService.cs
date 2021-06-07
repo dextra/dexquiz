@@ -217,5 +217,11 @@ namespace DexQuiz.Core.Services
                     UserId = userId,
                     QuestionId = q.Id
                 });
+
+        public async Task<int> PickTotalQuestionsForUserAsync(int userId, int trackId)
+        {
+            return (await _availableQuestionRepository
+                   .FindAsync(aq => aq.UserId == userId && aq.TrackId == trackId)).Count();
+        }
     }
 }

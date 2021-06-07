@@ -43,6 +43,7 @@ namespace DexQuiz.Client.Features.Track
                 {
                     State.StartLoading();
                     await PostQuestionAnswer(action.Answer, cancellationToken);
+                    await GetRemainingQuestions(action.TrackId, cancellationToken);
                     
                     if (State.RemainingQuestions == State.TotalQuestions)
                     {
@@ -81,6 +82,10 @@ namespace DexQuiz.Client.Features.Track
                 {
                     throw new UnauthorizedAccessException(response.ReasonPhrase);
                 }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return;
+                }
                 else
                 {
                     throw new Exception(response.ReasonPhrase);
@@ -94,6 +99,7 @@ namespace DexQuiz.Client.Features.Track
                 if (response.IsSuccessStatusCode)
                 {
                     var progress = await response.Content.ReadFromJsonAsync<TrackProgressModel>();
+                    State.TotalQuestions = progress.TotalQuestions;
                     return State.TotalQuestions - progress.QuestionNumber;
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized
