@@ -13,8 +13,8 @@ namespace DexQuiz.Core.Services
 {
     public class QuestionService : IQuestionService
     {
-        private const short AmountOfTrackQuestionsForUser = 3;
-        private const short AmountOfTrackQuestionsPerLevel = 3;
+        private const short AmountOfTrackQuestionsForUser = 5;
+        private const short AmountOfTrackQuestionsPerLevel = 5;
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IQuestionRepository _questionRepository;
