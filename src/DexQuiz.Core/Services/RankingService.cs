@@ -232,7 +232,7 @@ namespace DexQuiz.Core.Services
             int counter = 1;
             string username = (await _userRepository.FindAsync(userId))?.Name;
 
-            return (await _trackRankingRepository.FindAsync(r => r.CompletedTime != null))
+            var result = (await _trackRankingRepository.FindAsync(r => r.CompletedTime != null))
                 .GroupBy(
                     g => new { UserId = g.UserId, Username = userId == g.UserId ? username : "Participante" },
                     p => new { p.Points, p.CompletedTime },
@@ -250,6 +250,17 @@ namespace DexQuiz.Core.Services
                     r.Position = counter++;
                     return r;
                 }).ToList();
+
+            var ranking = result.Take(top).ToList();
+
+            if (!ranking.Any(r => r.UserId == userId))
+            {
+                var rankingUser = result.FirstOrDefault(u => u.UserId == userId);
+                if (rankingUser != null)
+                    ranking.Add(rankingUser);
+            }
+
+            return ranking.OrderBy(x => x.Position).ThenBy(x => x.CompletedTime);
         }
     }
 }
