@@ -99,7 +99,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Mediator.Send(new DashboardState.LoadGeneralRankingAction(10));
+        await Mediator.Send(new DashboardState.LoadGeneralRankingAction(5));
     }
 
     private string FormatName(string name)
